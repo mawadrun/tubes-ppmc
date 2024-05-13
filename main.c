@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include <time.h>
+#include <sys/time.h>
+#include <math.h>
 
 #define MAX_ROW 256
 #define MAX_COL 256
@@ -7,14 +8,60 @@
 struct Coords
 {
     int x, y;
+    int g, h;
 };
 
 int isInList(struct Coords val, struct Coords *list)
 {
 }
 
-int aStar(char *matrix, int m, int n)
+int manhattanDistance(struct Coords p1, struct Coords p2)
 {
+    return abs(p1.x - p2.x) + abs(p1.y - p2.y);
+}
+
+struct Coords findStart(char matrix[MAX_COL][MAX_ROW], int m, int n)
+{
+    struct Coords val;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix[i][j] == 'S')
+            {
+                val.x = i;
+                val.y = j;
+                return val;
+            }
+        }
+    }
+    return val;
+}
+
+struct Coords findEnd(char matrix[MAX_COL][MAX_ROW], int m, int n)
+{
+    struct Coords val;
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix[i][j] == 'E')
+            {
+                val.x = i;
+                val.y = j;
+                return val;
+            }
+        }
+    }
+    return val;
+}
+
+int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
+{
+    struct Coords start = findStart(matrix, m, n);
+    struct Coords end = findEnd(matrix, m, n);
+
+    printf("Start: %d, %d\nEnd: %d, %d\n", start.x, start.y, end.x, end.y);
 }
 
 int main()
@@ -27,11 +74,11 @@ int main()
     int m = 7, n = 7;
     char matrix[MAX_COL][MAX_ROW] = {
         {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
         {'O', 'O', 'O', 'O', 'O', 'O', 'E'},
     };
 
