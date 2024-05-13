@@ -170,7 +170,11 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
     struct Coords curr_coords = start;
 
     addNeighbors(&curr_coords, &head, matrix, m, n, end);
-    curr_coords = dequeue(&head);
+    while (head != NULL)
+    {
+        curr_coords = dequeue(&head);
+        addNeighbors(&curr_coords, &head, matrix, m, n, end);
+    }
 }
 
 int main()
@@ -183,9 +187,9 @@ int main()
     int m = 7, n = 7;
     char matrix[MAX_COL][MAX_ROW] = {
         {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'O', 'X', 'O', 'X', 'O', 'O', 'O'},
         {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
+        {'X', 'X', 'O', 'X', 'O', 'O', 'O'},
         {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
         {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
         {'O', 'O', 'O', 'O', 'O', 'O', 'E'},
