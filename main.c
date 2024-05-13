@@ -52,6 +52,25 @@ int manhattanDistance(struct Coords p1, struct Coords p2)
     return abs(p1.x - p2.x) + abs(p1.y - p2.y);
 }
 
+int isSameCoords(struct Coords p1, struct Coords p2)
+{
+    int val;
+    val = p1.x == p2.x && p1.y == p2.y ? 1 : 0;
+    return val;
+}
+
+void printMatrix(char matrix[MAX_COL][MAX_ROW], int m, int n)
+{
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            printf("%c ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 struct Coords findStart(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     struct Coords val;
@@ -88,45 +107,64 @@ struct Coords findEnd(char matrix[MAX_COL][MAX_ROW], int m, int n)
     return val;
 }
 
-void addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords end)
+int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords end)
 {
     struct Coords new_coords;
-    if (matrix[coords->x + 1][coords->y] == 'O' && coords->x + 1 < m)
+    struct Coords *new_parent = (struct Coords *)malloc(sizeof(struct Coords));
+    *new_parent = *coords;
+    if (matrix[coords->x + 1][coords->y] != 'X' && coords->x + 1 < m)
     {
         new_coords.x = coords->x + 1;
         new_coords.y = coords->y;
         new_coords.g = coords->g + 1;
         new_coords.h = manhattanDistance(new_coords, end);
-        new_coords.parent = coords;
+        new_coords.parent = new_parent;
+        if (isSameCoords(new_coords, end))
+        {
+            return 1;
+        }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y + 1] == 'O' && coords->y + 1 < n)
+    if (matrix[coords->x][coords->y + 1] != 'X' && coords->y + 1 < n)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y + 1;
         new_coords.g = coords->g + 1;
-        new_coords.parent = coords;
+        new_coords.parent = new_parent;
         new_coords.h = manhattanDistance(new_coords, end);
+        if (isSameCoords(new_coords, end))
+        {
+            return 1;
+        }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x - 1][coords->y] == 'O' && coords->x - 1 >= 0)
+    if (matrix[coords->x - 1][coords->y] != 'X' && coords->x - 1 >= 0)
     {
         new_coords.x = coords->x - 1;
         new_coords.y = coords->y;
         new_coords.g = coords->g + 1;
-        new_coords.parent = coords;
+        new_coords.parent = new_parent;
         new_coords.h = manhattanDistance(new_coords, end);
+        if (isSameCoords(new_coords, end))
+        {
+            return 1;
+        }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y - 1] == 'O' && coords->y - 1 >= 0)
+    if (matrix[coords->x][coords->y - 1] != 'X' && coords->y - 1 >= 0)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y - 1;
         new_coords.g = coords->g + 1;
-        new_coords.parent = coords;
+        new_coords.parent = new_parent;
         new_coords.h = manhattanDistance(new_coords, end);
+        if (isSameCoords(new_coords, end))
+        {
+            return 1;
+        }
         enqueue(new_coords, head);
     }
+    return 0;
 }
 
 int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
@@ -168,13 +206,22 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
     */
     struct PriorityQueueNode *head = NULL;
     struct Coords curr_coords = start;
+    int found = 0;
 
-    addNeighbors(&curr_coords, &head, matrix, m, n, end);
-    while (head != NULL)
+    found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
+    while (head != NULL && !found)
     {
         curr_coords = dequeue(&head);
-        addNeighbors(&curr_coords, &head, matrix, m, n, end);
+        found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     }
+
+    // Print result
+    while (!isSameCoords(curr_coords, start))
+    {
+        matrix[curr_coords.x][curr_coords.y] = ' ';
+        curr_coords = *(curr_coords.parent);
+    }
+    printMatrix(matrix, m, n);
 }
 
 int main()
