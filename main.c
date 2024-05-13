@@ -21,8 +21,16 @@ struct PriorityQueueNode
 
 void enqueue(struct Coords coords, struct PriorityQueueNode **head)
 {
+    if (*head == NULL)
+    {
+        struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
+        new->coords = coords;
+        new->next = NULL;
+        *head = new;
+        return;
+    }
     struct PriorityQueueNode *current = *head;
-    while ((coords.g + coords.h) >= ((current->next)->coords.g + (current->next)->coords.h))
+    while (current->next != NULL && (coords.g + coords.h) >= ((current->next)->coords.g + (current->next)->coords.h))
     {
         current = current->next;
     }
