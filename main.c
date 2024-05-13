@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>
+#include <stdlib.h>
 
 #define MAX_ROW 256
 #define MAX_COL 256
@@ -9,10 +10,32 @@ struct Coords
 {
     int x, y;
     int g, h;
+    struct Coords *parent;
 };
 
-int isInList(struct Coords val, struct Coords *list)
+struct PriorityQueueNode
 {
+    struct Coords coords;
+    struct PriorityQueueNode *next;
+};
+
+void enqueue(struct Coords coords, struct PriorityQueueNode **head)
+{
+    struct PriorityQueueNode *current = *head;
+    while ((coords.g + coords.h) >= ((current->next)->coords.g + (current->next)->coords.h))
+    {
+        current = current->next;
+    }
+    struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
+    new->coords = coords;
+    new->next = current->next;
+    current->next = new;
+}
+
+struct Coords dequeue(struct PriorityQueueNode **head)
+{
+    struct Coords val = (*head)->coords;
+    *head = (*head)->next;
 }
 
 int manhattanDistance(struct Coords p1, struct Coords p2)
@@ -56,6 +79,47 @@ struct Coords findEnd(char matrix[MAX_COL][MAX_ROW], int m, int n)
     return val;
 }
 
+void addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords end)
+{
+    struct Coords new_coords;
+    if (matrix[coords->x + 1][coords->y] == 'O' && coords->x + 1 < m)
+    {
+        new_coords.x = coords->x + 1;
+        new_coords.y = coords->y;
+        new_coords.g = coords->g + 1;
+        new_coords.h = manhattanDistance(new_coords, end);
+        new_coords.parent = coords;
+        enqueue(new_coords, head);
+    }
+    if (matrix[coords->x][coords->y + 1] == 'O' && coords->y + 1 < n)
+    {
+        new_coords.x = coords->x;
+        new_coords.y = coords->y + 1;
+        new_coords.g = coords->g + 1;
+        new_coords.parent = coords;
+        new_coords.h = manhattanDistance(new_coords, end);
+        enqueue(new_coords, head);
+    }
+    if (matrix[coords->x - 1][coords->y] == 'O' && coords->x - 1 >= 0)
+    {
+        new_coords.x = coords->x - 1;
+        new_coords.y = coords->y;
+        new_coords.g = coords->g + 1;
+        new_coords.parent = coords;
+        new_coords.h = manhattanDistance(new_coords, end);
+        enqueue(new_coords, head);
+    }
+    if (matrix[coords->x][coords->y - 1] == 'O' && coords->y - 1 >= 0)
+    {
+        new_coords.x = coords->x;
+        new_coords.y = coords->y - 1;
+        new_coords.g = coords->g + 1;
+        new_coords.parent = coords;
+        new_coords.h = manhattanDistance(new_coords, end);
+        enqueue(new_coords, head);
+    }
+}
+
 int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     struct Coords start = findStart(matrix, m, n);
@@ -93,6 +157,10 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
         tidak ada di closed list, tambahkan keempatnya ke open list. Jadikan
         titik aktif sebagai parent dari keempatnya.
     */
+    struct PriorityQueueNode *head = NULL;
+    struct Coords curr_coords = start;
+
+    addNeighbors(&curr_coords, &head, matrix, m, n, end);
 }
 
 int main()
