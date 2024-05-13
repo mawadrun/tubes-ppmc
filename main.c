@@ -78,6 +78,20 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
       - Hilangkan titik aktif dari open list. Tambahkan ke closed list
       - Periksa keempat tetangga dari titik aktif yang mungkin dikunjungi dan
         tidak ada di closed list, tambahkan keempatnya ke open list.
+
+    ALTERNATIF
+    - Buat open list untuk menyimpan kandidat titik yang dapat dikunjungi.
+    - Masukkan titik awal ke closed list. Jadikan ia sebagai titik aktif
+    - Masukkan keempat tetangga dari titik aktif yang mungkin
+      dikunjungi; yakni arah bawah, kanan, atas, dan kiri; ke dalam open list.
+      Jadikan titik aktif sebagai parent dari keempatnya.
+    - Selama open list tidak kosong:
+      - Dapatkan koordinat dari open list yang memiliki cost terkecil. Jadikan
+        sebagai titik aktif.
+      - Hilangkan titik aktif dari open list.
+      - Periksa keempat tetangga dari titik aktif yang mungkin dikunjungi dan
+        tidak ada di closed list, tambahkan keempatnya ke open list. Jadikan
+        titik aktif sebagai parent dari keempatnya.
     */
 }
 
