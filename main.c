@@ -44,6 +44,7 @@ struct Coords dequeue(struct PriorityQueueNode **head)
 {
     struct Coords val = (*head)->coords;
     *head = (*head)->next;
+    return val;
 }
 
 int manhattanDistance(struct Coords p1, struct Coords p2)
@@ -169,6 +170,7 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
     struct Coords curr_coords = start;
 
     addNeighbors(&curr_coords, &head, matrix, m, n, end);
+    curr_coords = dequeue(&head);
 }
 
 int main()
