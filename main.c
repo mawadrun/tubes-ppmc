@@ -60,8 +60,10 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     struct Coords start = findStart(matrix, m, n);
     struct Coords end = findEnd(matrix, m, n);
+    int distance = manhattanDistance(start, end);
 
     printf("Start: %d, %d\nEnd: %d, %d\n", start.x, start.y, end.x, end.y);
+    printf("Distance: %d\n", distance);
 }
 
 int main()
