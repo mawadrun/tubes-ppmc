@@ -19,6 +19,18 @@ struct PriorityQueueNode
     struct PriorityQueueNode *next;
 };
 
+int manhattanDistance(struct Coords p1, struct Coords p2)
+{
+    return abs(p1.x - p2.x) + abs(p1.y - p2.y);
+}
+
+int isSameCoords(struct Coords p1, struct Coords p2)
+{
+    int val;
+    val = p1.x == p2.x && p1.y == p2.y ? 1 : 0;
+    return val;
+}
+
 void enqueue(struct Coords coords, struct PriorityQueueNode **head)
 {
     if (*head == NULL)
@@ -34,28 +46,19 @@ void enqueue(struct Coords coords, struct PriorityQueueNode **head)
     {
         current = current->next;
     }
-    struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
-    new->coords = coords;
-    new->next = current->next;
-    current->next = new;
+    if (!isSameCoords(coords, current->coords))
+    {
+        struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
+        new->coords = coords;
+        new->next = current->next;
+        current->next = new;
+    }
 }
 
 struct Coords dequeue(struct PriorityQueueNode **head)
 {
     struct Coords val = (*head)->coords;
     *head = (*head)->next;
-    return val;
-}
-
-int manhattanDistance(struct Coords p1, struct Coords p2)
-{
-    return abs(p1.x - p2.x) + abs(p1.y - p2.y);
-}
-
-int isSameCoords(struct Coords p1, struct Coords p2)
-{
-    int val;
-    val = p1.x == p2.x && p1.y == p2.y ? 1 : 0;
     return val;
 }
 
@@ -112,7 +115,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
     struct Coords new_coords;
     struct Coords *new_parent = (struct Coords *)malloc(sizeof(struct Coords));
     *new_parent = *coords;
-    if (matrix[coords->x + 1][coords->y] != 'X' && coords->x + 1 < m)
+    if (matrix[coords->x + 1][coords->y] != 'X' && matrix[coords->x + 1][coords->y] != '0' && coords->x + 1 < m)
     {
         new_coords.x = coords->x + 1;
         new_coords.y = coords->y;
@@ -125,7 +128,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y + 1] != 'X' && coords->y + 1 < n)
+    if (matrix[coords->x][coords->y + 1] != 'X' && matrix[coords->x][coords->y + 1] != '0' && coords->y + 1 < n)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y + 1;
@@ -138,7 +141,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x - 1][coords->y] != 'X' && coords->x - 1 >= 0)
+    if (matrix[coords->x - 1][coords->y] != 'X' && matrix[coords->x - 1][coords->y] != '0' && coords->x - 1 >= 0)
     {
         new_coords.x = coords->x - 1;
         new_coords.y = coords->y;
@@ -151,7 +154,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y - 1] != 'X' && coords->y - 1 >= 0)
+    if (matrix[coords->x][coords->y - 1] != 'X' && matrix[coords->x][coords->y - 1] != '0' && coords->y - 1 >= 0)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y - 1;
@@ -207,11 +210,37 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
     struct PriorityQueueNode *head = NULL;
     struct Coords curr_coords = start;
     int found = 0;
+    char matrix_temp[MAX_COL][MAX_ROW];
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix_temp[i][j] = matrix[i][j];
+        }
+    }
+
+    matrix_temp[curr_coords.x][curr_coords.y] = ' ';
+
+    printMatrix(matrix_temp, m, n);
 
     found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     while (head != NULL && !found)
     {
+        printf("\n");
+        printf("Priority Queue: ");
+        struct PriorityQueueNode *print = head;
+        while (print != NULL)
+        {
+            printf("(%d, %d, %d, %d) ", (print->coords).x, (print->coords).y, (print->coords).g, (print->coords).h);
+            print = print->next;
+        }
+        printf("\n");
+        matrix_temp[curr_coords.x][curr_coords.y] = '0';
+        matrix[curr_coords.x][curr_coords.y] = '0';
         curr_coords = dequeue(&head);
+        matrix_temp[curr_coords.x][curr_coords.y] = ' ';
+        printMatrix(matrix_temp, m, n);
         found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     }
 
@@ -231,15 +260,16 @@ int main()
     long dt;              // Delta time (us)
 
     // Variables
-    int m = 7, n = 7;
+    int m = 8, n = 7;
     char matrix[MAX_COL][MAX_ROW] = {
         {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'X', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-        {'X', 'X', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'E'},
+        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
+        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+        {'O', 'O', 'X', 'X', 'X', 'X', 'O'},
+        {'O', 'O', 'O', 'O', 'E', 'O', 'O'},
     };
 
     gettimeofday(&time1, NULL);
