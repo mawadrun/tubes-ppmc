@@ -250,6 +250,7 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
         matrix[curr_coords.x][curr_coords.y] = ' ';
         curr_coords = *(curr_coords.parent);
     }
+    printf("\nFinal Path:\n");
     printMatrix(matrix, m, n);
 }
 
@@ -277,7 +278,7 @@ int main()
     gettimeofday(&time2, NULL);
     dt = (time2.tv_sec - time1.tv_sec) * 1000000 + time2.tv_usec - time1.tv_usec;
     printf("Done.\n");
-    printf("A-Star took %d us.");
+    printf("A-Star took %d us.", dt);
 
     return 0;
 }
