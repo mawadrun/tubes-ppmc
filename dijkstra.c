@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
-
+#include <time.h>
 #define MAX 236
 
 typedef struct {
@@ -12,7 +12,6 @@ typedef struct {
     Point pt;
     int dist;
 } Node;
-
 
 int dx[] = { 0, -1, 1, 0 }; // atas, kiri, kanan, bawah
 int dy[] = { 1, 0, 0, -1 }; // atas, kiri, kanan, bawah
@@ -95,7 +94,7 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
         path[pathLen++] = at;
     }
     for (int i = pathLen - 1; i >= 0; i--) {
-        printf("(%d, %d)", path[i].y, -path[i].x); //Asumsi kebawah (-) dan keatas (+)
+        printf("(%d, %d)", path[i].y, -path[i].x);  // Asumsi kebawah (-) dan keatas (+)
         if (i > 0) printf(" -> ");
     }
     printf("\n");
@@ -104,7 +103,7 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
 
 int main() {
     char filename[20];
-    printf("Nama file yang akan dibaca: ");
+    printf("Enter file name (something.txt): ");
     scanf("%s", filename);
     FILE *file = fopen(filename, "r");
     if (!file) {
@@ -140,7 +139,11 @@ int main() {
         return EXIT_FAILURE;
     }
 
+    clock_t start_time = clock();
     dijkstra(maze, rows, cols, start, end);
+    clock_t end_time = clock();
+    double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
+    printf("Elapsed time: %f seconds\n", time_taken);
 
     return EXIT_SUCCESS;
 }
