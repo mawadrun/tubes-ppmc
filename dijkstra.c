@@ -20,6 +20,23 @@ int isValid(int x, int y, int rows, int cols) { //cek boundary
     return (x >= 0 && y >= 0 && x < rows && y < cols);
 }
 
+void printMaze(char maze[MAX][MAX], int rows, int cols) {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            printf("%c ", maze[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void markShortestPath(char maze[MAX][MAX], Point path[], int pathLen) {
+    for (int i = 0; i < pathLen; i++) {
+        if (maze[path[i].x][path[i].y] != 'S' && maze[path[i].x][path[i].y] != 'E') {
+            maze[path[i].x][path[i].y] = '*';
+        }
+    }
+}
+
 int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
     int dist[MAX][MAX];
     int visited[MAX][MAX];
@@ -92,11 +109,15 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
     for (Point at = end; at.x != -1 && at.y != -1; at = prev[at.x][at.y]) {
         path[pathLen++] = at;
     }
-    for (int i = pathLen - 1; i >= 0; i--) { //print shortest path
-        printf("(%d, %d)", path[i].y, -path[i].x);  // Asumsi kebawah (-) dan keatas (+)
+        for (int i = pathLen - 1; i >= 0; i--) { //print shortest path
+        printf("(%d, %d)", path[i].y, path[i].x);
         if (i > 0) printf(" -> ");
     }
     printf("\n");
+
+    // Mark the shortest path with '*'
+    markShortestPath(maze, path, pathLen);
+
     return 1;
 }
 
@@ -133,18 +154,17 @@ int main() {
     }
     fclose(file);
 
-    // if (start.x == -1 || end.x == -1) {
-    //     printf("Invalid maze, start or end point not found.\n");
-    //     return EXIT_FAILURE;
-    // }
-
     clock_t start_time = clock();
-    dijkstra(maze, rows, cols, start, end);
+    int result = dijkstra(maze, rows, cols, start, end);
     clock_t end_time = clock();
     double time_taken = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
     printf("Elapsed time: %f seconds\n", time_taken);
 
+    if (result) {
+        printf("Maze with shortest path marked:\n");
+        printMaze(maze, rows, cols);
+    }
+
     return EXIT_SUCCESS;
 }
 
-//DONE ??
