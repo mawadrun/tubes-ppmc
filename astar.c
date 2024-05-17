@@ -200,7 +200,8 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
     printf("Distance: %d\n", distance);
 
     struct PriorityQueueNode *head = NULL;
-    struct Coords curr_coords = start;
+    struct Coords *curr_coords = (struct Coords *)malloc(sizeof(struct Coords));
+    *curr_coords = start;
     int found = 0;
     char matrix_original[MAX_COL][MAX_ROW];
 
@@ -213,7 +214,7 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
         }
     }
 
-    found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
+    found = addNeighbors(curr_coords, &head, matrix, m, n, end);
     while (head != NULL && !found)
     {
         // Priority queue debug, uncomment to show in output
@@ -226,9 +227,9 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
         //     print = print->next;
         // }
         // printf("\n");
-        matrix[curr_coords.x][curr_coords.y] = '0'; // tandai titik yang telah ditelusuri
-        curr_coords = dequeue(&head);
-        found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
+        matrix[curr_coords->x][curr_coords->y] = '0'; // tandai titik yang telah ditelusuri
+        *curr_coords = dequeue(&head);
+        found = addNeighbors(curr_coords, &head, matrix, m, n, end);
     }
 
     if (!found)
@@ -237,10 +238,10 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
     }
     else
     { // Print result
-        while (!isSameCoords(curr_coords, start))
+        while (!isSameCoords(*curr_coords, start))
         {
-            matrix_original[curr_coords.x][curr_coords.y] = 'V';
-            curr_coords = *(curr_coords.parent);
+            matrix_original[curr_coords->x][curr_coords->y] = 'V';
+            *curr_coords = *(curr_coords->parent);
         }
         printf("\nFinal Path:\n");
         printMatrix(matrix_original, m, n);
