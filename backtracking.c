@@ -24,7 +24,7 @@ int main() {
     int rows = 0, cols = 0; // Initialize rows and cols
 
     char filename[100]; 
-    printf("\nEnter file name: "); 
+    printf("\nMasukkan Nama File: "); 
     scanf("%s", filename); 
 
     // Open the file
