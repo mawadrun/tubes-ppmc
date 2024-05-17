@@ -6,6 +6,12 @@
 #define MAX_ROW 256
 #define MAX_COL 256
 
+/*
+x, y: titik koordinat
+g: jarak titik koordinat dari titik awal
+h: jarak titik koordinat dari titik akhir
+parent: titik sebelumnya yang dilalui sebelum mencapai titik ini dari arah titik awal
+*/
 struct Coords
 {
     int x, y;
@@ -13,17 +19,23 @@ struct Coords
     struct Coords *parent;
 };
 
+/*
+coords: titik koordinat yang dimuat di node priority queue
+next: node berikutnya
+*/
 struct PriorityQueueNode
 {
     struct Coords coords;
     struct PriorityQueueNode *next;
 };
 
+// Menghitung jarak Manhattan antara p1 dan p2
 int manhattanDistance(struct Coords p1, struct Coords p2)
 {
     return abs(p1.x - p2.x) + abs(p1.y - p2.y);
 }
 
+// Membandingkan koordinat p1 dan p2, me-return 1 jika dan hanya jika keduanya sama.
 int isSameCoords(struct Coords p1, struct Coords p2)
 {
     int val;
@@ -31,8 +43,10 @@ int isSameCoords(struct Coords p1, struct Coords p2)
     return val;
 }
 
+// Memasukkan coords ke priority queue head dengan mempertahankan keterurutan priority queue berdasarkan cost y = g + h, dari yang terpendek.
 void enqueue(struct Coords coords, struct PriorityQueueNode **head)
 {
+    // Case priority queue masih kosong, simpan coords sebagai elemen pertama
     if (*head == NULL)
     {
         struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
@@ -41,11 +55,13 @@ void enqueue(struct Coords coords, struct PriorityQueueNode **head)
         *head = new;
         return;
     }
+    // Case queue tidak kosong, cari posisi agar isi priority queue berurutan berdasarkan y = g + h, ambil posisi paling kanan yang mungkin
     struct PriorityQueueNode *current = *head;
     while (current->next != NULL && (coords.g + coords.h) >= ((current->next)->coords.g + (current->next)->coords.h))
     {
         current = current->next;
     }
+    // Jika posisi yang ditemukan berisi koordinat yang sama dengan argumen, jangan simpan argumen ke priority queue
     if (!isSameCoords(coords, current->coords))
     {
         struct PriorityQueueNode *new = (struct PriorityQueueNode *)malloc(sizeof(struct PriorityQueueNode));
@@ -55,6 +71,7 @@ void enqueue(struct Coords coords, struct PriorityQueueNode **head)
     }
 }
 
+// dequeue biasa
 struct Coords dequeue(struct PriorityQueueNode **head)
 {
     struct Coords val = (*head)->coords;
@@ -62,6 +79,7 @@ struct Coords dequeue(struct PriorityQueueNode **head)
     return val;
 }
 
+// melakukan printing isi matriks berukuran m x n
 void printMatrix(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     for (int i = 0; i < m; i++)
@@ -74,6 +92,7 @@ void printMatrix(char matrix[MAX_COL][MAX_ROW], int m, int n)
     }
 }
 
+// Mencari titik awal dari map dengan format matriks berukuran m x n
 struct Coords findStart(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     struct Coords val;
@@ -92,6 +111,7 @@ struct Coords findStart(char matrix[MAX_COL][MAX_ROW], int m, int n)
     return val;
 }
 
+// Mencari titik akhir dari map dengan format matriks berukuran m x n
 struct Coords findEnd(char matrix[MAX_COL][MAX_ROW], int m, int n)
 {
     struct Coords val;
@@ -110,12 +130,13 @@ struct Coords findEnd(char matrix[MAX_COL][MAX_ROW], int m, int n)
     return val;
 }
 
+// Mencari tetangga yang valid dan menambahnya ke priority queue. Jika tidak ditemukan jalan, return 0
 int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords end)
 {
     struct Coords new_coords;
     struct Coords *new_parent = (struct Coords *)malloc(sizeof(struct Coords));
     *new_parent = *coords;
-    if (matrix[coords->x + 1][coords->y] != 'X' && matrix[coords->x + 1][coords->y] != '0' && coords->x + 1 < m)
+    if (matrix[coords->x + 1][coords->y] != '#' && matrix[coords->x + 1][coords->y] != '0' && coords->x + 1 < m)
     {
         new_coords.x = coords->x + 1;
         new_coords.y = coords->y;
@@ -128,7 +149,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y + 1] != 'X' && matrix[coords->x][coords->y + 1] != '0' && coords->y + 1 < n)
+    if (matrix[coords->x][coords->y + 1] != '#' && matrix[coords->x][coords->y + 1] != '0' && coords->y + 1 < n)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y + 1;
@@ -141,7 +162,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x - 1][coords->y] != 'X' && matrix[coords->x - 1][coords->y] != '0' && coords->x - 1 >= 0)
+    if (matrix[coords->x - 1][coords->y] != '#' && matrix[coords->x - 1][coords->y] != '0' && coords->x - 1 >= 0)
     {
         new_coords.x = coords->x - 1;
         new_coords.y = coords->y;
@@ -154,7 +175,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         }
         enqueue(new_coords, head);
     }
-    if (matrix[coords->x][coords->y - 1] != 'X' && matrix[coords->x][coords->y - 1] != '0' && coords->y - 1 >= 0)
+    if (matrix[coords->x][coords->y - 1] != '#' && matrix[coords->x][coords->y - 1] != '0' && coords->y - 1 >= 0)
     {
         new_coords.x = coords->x;
         new_coords.y = coords->y - 1;
@@ -170,63 +191,32 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
     return 0;
 }
 
-int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
+// Algoritma A*
+int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, struct Coords end)
 {
-    struct Coords start = findStart(matrix, m, n);
-    struct Coords end = findEnd(matrix, m, n);
     int distance = manhattanDistance(start, end);
 
     printf("Start: %d, %d\nEnd: %d, %d\n", start.x, start.y, end.x, end.y);
     printf("Distance: %d\n", distance);
 
-    /*
-    - Buat dua buah list, open dan closed.
-      Open list digunakan untuk menyimpan kandidat titik yang dapat dikunjungi,
-      dan closed list digunakan untuk menyimpan titik yang sudah dikunjungi.
-    - Masukkan titik awal ke closed list. Jadikan ia sebagai titik aktif
-    - Masukkan keempat tetangga dari titik aktif yang mungkin
-      dikunjungi; yakni arah bawah, kanan, atas, dan kiri; ke dalam open list.
-    - Selama open list tidak kosong:
-      - Dapatkan koordinat dari open list yang memiliki cost terkecil. Jadikan
-        sebagai titik aktif.
-      - Hilangkan titik aktif dari open list. Tambahkan ke closed list
-      - Periksa keempat tetangga dari titik aktif yang mungkin dikunjungi dan
-        tidak ada di closed list, tambahkan keempatnya ke open list.
-
-    ALTERNATIF
-    - Buat open list untuk menyimpan kandidat titik yang dapat dikunjungi.
-    - Masukkan titik awal ke closed list. Jadikan ia sebagai titik aktif
-    - Masukkan keempat tetangga dari titik aktif yang mungkin
-      dikunjungi; yakni arah bawah, kanan, atas, dan kiri; ke dalam open list.
-      Jadikan titik aktif sebagai parent dari keempatnya.
-    - Selama open list tidak kosong:
-      - Dapatkan koordinat dari open list yang memiliki cost terkecil. Jadikan
-        sebagai titik aktif.
-      - Hilangkan titik aktif dari open list.
-      - Periksa keempat tetangga dari titik aktif yang mungkin dikunjungi dan
-        tidak ada di closed list, tambahkan keempatnya ke open list. Jadikan
-        titik aktif sebagai parent dari keempatnya.
-    */
     struct PriorityQueueNode *head = NULL;
     struct Coords curr_coords = start;
     int found = 0;
-    char matrix_temp[MAX_COL][MAX_ROW];
+    char matrix_original[MAX_COL][MAX_ROW];
 
+    // Copy matriks original
     for (int i = 0; i < m; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            matrix_temp[i][j] = matrix[i][j];
+            matrix_original[i][j] = matrix[i][j];
         }
     }
-
-    // matrix_temp[curr_coords.x][curr_coords.y] = ' ';
-
-    // printMatrix(matrix_temp, m, n);
 
     found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     while (head != NULL && !found)
     {
+        // Priority queue debug, uncomment to show in output
         // printf("\n");
         // printf("Priority Queue: ");
         // struct PriorityQueueNode *print = head;
@@ -236,22 +226,25 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
         //     print = print->next;
         // }
         // printf("\n");
-        matrix_temp[curr_coords.x][curr_coords.y] = '0';
-        matrix[curr_coords.x][curr_coords.y] = '0';
+        matrix[curr_coords.x][curr_coords.y] = '0'; // tandai titik yang telah ditelusuri
         curr_coords = dequeue(&head);
-        matrix_temp[curr_coords.x][curr_coords.y] = ' ';
-        // printMatrix(matrix_temp, m, n);
         found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     }
 
-    // Print result
-    while (!isSameCoords(curr_coords, start))
+    if (!found)
     {
-        matrix[curr_coords.x][curr_coords.y] = ' ';
-        curr_coords = *(curr_coords.parent);
+        printf("\nNo path found\n");
     }
-    printf("\nFinal Path:\n");
-    printMatrix(matrix, m, n);
+    else
+    { // Print result
+        while (!isSameCoords(curr_coords, start))
+        {
+            matrix_original[curr_coords.x][curr_coords.y] = 'V';
+            curr_coords = *(curr_coords.parent);
+        }
+        printf("\nFinal Path:\n");
+        printMatrix(matrix_original, m, n);
+    }
 }
 
 int main()
@@ -260,44 +253,33 @@ int main()
     struct timeval time2; // Finish time
     long dt;              // Delta time (us)
 
-    char maze[441] = "SOXXXXXXXXXXXXXXXXXXXOOXOOOOOXOOOOOOOXOOOXXOXXXOXXXOXOXXXXXXXOXXOOOOOOOOOXOXOXOOOOOXXXXXXOXOXXXOXOXOXXXOXXOOOOOXOXOOOOOOOOOXOXXOXXXOXXXXXOXXXXXXXXXXOXOXOXOXOOOXOOOOOOOXXXXOXXXOXOXXXOXXXXXOXXOOOOOXOOOOOOOXOXOXOXXOXOXXXOXXXXXXXOXOXOXXOXOXOOOXOOOOOOOOOOOXXXXOXOXXXOXOXXXXXXXXXXOOOXOOOXOXOOOOOOOOOXXOXOXXXOXXXOXOXOXOXXXXOXOXOOOXOOOXOXOXOOOXXOXXXOXXXXXXXXXXXOXXXXOOOOOXOXOOOOOXOOOXOXXOXXXXXOXOXXXXXOXOXOXXOOOOOOOOOOOXOOOXOOOXXXXXXXXXXXXXXXXXXXXEX";
-    // Variables
+    int m = 18, n = 23;
+    char matrix[MAX_COL][MAX_ROW] = {
+        {'S', '#', '_', '_', '_', '#', '_', '_', '_', '#', '_', '_', '_', '_', '_', '_', '#', '#', '_', '_', '_', '#', '_'},
+        {'_', '_', '_', '#', '_', '_', '_', '#', '_', '_', '_', '_', '#', '_', '#', '_', '#', '_', '_', '#', '_', '#', '_'},
+        {'_', '#', '#', '_', '_', '_', '#', '_', '_', '#', '#', '#', '_', '_', '_', '_', '_', '#', '#', '_', '_', '_', '_'},
+        {'_', '_', '_', '_', '#', '#', '_', '_', '#', '_', '_', '_', '_', '#', '_', '#', '#', '_', '_', '_', '#', '#', '_'},
+        {'#', '#', '#', '#', '#', '_', '#', '#', '#', '#', '#', '#', '#', '#', '_', '#', '_', '#', '#', '#', '#', '_', '_'},
+        {'_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'},
+        {'_', '#', '#', '#', '#', '_', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '_', '#', '#', '#', '#', '_', '#'},
+        {'_', '_', '_', '_', '#', '_', '_', '_', '#', '_', '_', '_', '_', '#', '_', '#', '_', '_', '_', '_', '#', '_', '_'},
+        {'#', '#', '#', '_', '_', '#', '#', '_', '_', '#', '#', '#', '_', '_', '_', '_', '#', '#', '#', '_', '_', '#', '_'},
+        {'_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'},
+        {'_', '_', '_', '_', '#', '#', '_', '_', '#', '_', '_', '_', '_', '#', '_', '#', '#', '_', '_', '_', '#', '#', '#'},
+        {'_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'},
+        {'#', '#', '#', '_', '_', '_', '#', '_', '_', '#', '#', '#', '_', '_', '_', '_', '_', '#', '#', '_', '_', '_', '_'},
+        {'_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_'},
+        {'_', '#', '#', '_', '#', '#', '#', '_', '#', '#', '#', '#', '_', '#', '_', '#', '#', '#', '#', '_', '#', '#', '#'},
+        {'_', '_', '#', '_', '_', '_', '#', '_', '_', '_', '#', '#', '_', '_', '_', '_', '_', '_', '#', '_', '_', '_', '_'},
+        {'_', '_', '#', '#', '#', '#', '#', '#', '#', '_', '#', '#', '#', '#', '#', '#', '#', '_', '#', '#', '#', '#', '_'},
+        {'_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', '_', 'E', '_', '_'},
+    };
 
-    int m = 21, n = 21;
-
-    char matrix[MAX_COL][MAX_ROW];
-
-    for (int i = 0; i < m; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            matrix[i][j] = maze[i * 21 + j];
-        }
-    }
-
-    // char matrix[MAX_COL][MAX_ROW] = {
-    //     {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'X', 'X', 'X', 'X', 'X'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'O', 'O', 'X', 'X', 'X'},
-    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-    //     {'O', 'X', 'O', 'O', 'O', 'O', 'O'},
-    //     {'O', 'X', 'O', 'O', 'X', 'X', 'X'},
-    //     {'O', 'O', 'X', 'O', 'O', 'O', 'O'},
-    //     {'O', 'O', 'X', 'X', 'X', 'X', 'O'},
-    //     {'O', 'O', 'O', 'X', 'E', 'X', 'O'},
-    // };
+    struct Coords start = findStart(matrix, m, n);
+    struct Coords end = findEnd(matrix, m, n);
 
     gettimeofday(&time1, NULL);
-    aStar(matrix, m, n);
+    aStar(matrix, m, n, start, end);
     gettimeofday(&time2, NULL);
     dt = (time2.tv_sec - time1.tv_sec) * 1000000 + time2.tv_usec - time1.tv_usec;
     printf("Done.\n");
