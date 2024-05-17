@@ -16,7 +16,7 @@ typedef struct {
 int dx[] = { 0, -1, 1, 0 }; // atas, kiri, kanan, bawah
 int dy[] = { 1, 0, 0, -1 }; // atas, kiri, kanan, bawah
 
-int isValid(int x, int y, int rows, int cols) {
+int isValid(int x, int y, int rows, int cols) { //cek boundary
     return (x >= 0 && y >= 0 && x < rows && y < cols);
 }
 
@@ -33,14 +33,13 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
         }
     }
 
-    dist[start.x][start.y] = 0;
-    Node minHeap[MAX * MAX];
+    dist[start.x][start.y] = 0; //start point di 0
+    Node minHeap[MAX * MAX]; //min heap untuk nodes
     int heapSize = 0;
-
     minHeap[heapSize++] = (Node){ start, 0 };
 
-    while (heapSize > 0) {
-        Node minNode = minHeap[0];
+    while (heapSize > 0) { //ambil node dengan distance min
+        Node minNode = minHeap[0]; 
         minHeap[0] = minHeap[--heapSize];
         int i = 0;
         while (i * 2 + 1 < heapSize) {
@@ -61,7 +60,7 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
         if (visited[u.x][u.y]) continue;
         visited[u.x][u.y] = 1;
 
-        for (int k = 0; k < 4; k++) {
+        for (int k = 0; k < 4; k++) { //ke node tetangga
             int newX = u.x + dx[k];
             int newY = u.y + dy[k];
             if (isValid(newX, newY, rows, cols) && maze[newX][newY] != '#' && !visited[newX][newY]) {
@@ -82,18 +81,18 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point start, Point end) {
         }
     }
 
-    if (dist[end.x][end.y] == INT_MAX) {
+    if (dist[end.x][end.y] == INT_MAX) { // kalo point end gabisa di reach
         printf("No path found\n");
         return 0;
     }
 
     printf("Shortest path using Dijkstra: ");
-    Point path[MAX * MAX];
+    Point path[MAX * MAX]; 
     int pathLen = 0;
     for (Point at = end; at.x != -1 && at.y != -1; at = prev[at.x][at.y]) {
         path[pathLen++] = at;
     }
-    for (int i = pathLen - 1; i >= 0; i--) {
+    for (int i = pathLen - 1; i >= 0; i--) { //print shortest path
         printf("(%d, %d)", path[i].y, -path[i].x);  // Asumsi kebawah (-) dan keatas (+)
         if (i > 0) printf(" -> ");
     }
@@ -134,10 +133,10 @@ int main() {
     }
     fclose(file);
 
-    if (start.x == -1 || end.x == -1) {
-        printf("Invalid maze, start or end point not found.\n");
-        return EXIT_FAILURE;
-    }
+    // if (start.x == -1 || end.x == -1) {
+    //     printf("Invalid maze, start or end point not found.\n");
+    //     return EXIT_FAILURE;
+    // }
 
     clock_t start_time = clock();
     dijkstra(maze, rows, cols, start, end);
@@ -147,3 +146,5 @@ int main() {
 
     return EXIT_SUCCESS;
 }
+
+//DONE ??
