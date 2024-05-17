@@ -1,10 +1,9 @@
-    // int m = 7, n = 7;
-    // char matrix[MAX_COL][MAX_ROW] = {
-    //     {'S', 'O', 'O', 'O', 'O', 'X', 'O'},
-    //     {'O', 'X', 'O', 'X', 'O', 'X', 'O'},
-    //     {'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-    //     {'X', 'X', 'O', 'X', 'O', 'X', 'O'},
-    //     {'O', 'O', 'O', 'X', 'X', 'O', 'O'},
-    //     {'O', 'O', 'X', 'X', 'O', 'O', 'X'},
-    //     {'O', 'X', 'O', 'O', 'O', 'O', 'E'},
-    // };
+        // printf("\n");
+        // printf("Priority Queue: ");
+        // struct PriorityQueueNode *print = head;
+        // while (print != NULL)
+        // {
+        //     printf("(%d, %d, %d, %d) ", (print->coords).x, (print->coords).y, (print->coords).g, (print->coords).h);
+        //     print = print->next;
+        // }
+        // printf("\n");

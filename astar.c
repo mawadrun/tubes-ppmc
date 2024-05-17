@@ -220,27 +220,27 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n)
         }
     }
 
-    matrix_temp[curr_coords.x][curr_coords.y] = ' ';
+    // matrix_temp[curr_coords.x][curr_coords.y] = ' ';
 
-    printMatrix(matrix_temp, m, n);
+    // printMatrix(matrix_temp, m, n);
 
     found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     while (head != NULL && !found)
     {
-        printf("\n");
-        printf("Priority Queue: ");
-        struct PriorityQueueNode *print = head;
-        while (print != NULL)
-        {
-            printf("(%d, %d, %d, %d) ", (print->coords).x, (print->coords).y, (print->coords).g, (print->coords).h);
-            print = print->next;
-        }
-        printf("\n");
+        // printf("\n");
+        // printf("Priority Queue: ");
+        // struct PriorityQueueNode *print = head;
+        // while (print != NULL)
+        // {
+        //     printf("(%d, %d, %d, %d) ", (print->coords).x, (print->coords).y, (print->coords).g, (print->coords).h);
+        //     print = print->next;
+        // }
+        // printf("\n");
         matrix_temp[curr_coords.x][curr_coords.y] = '0';
         matrix[curr_coords.x][curr_coords.y] = '0';
         curr_coords = dequeue(&head);
         matrix_temp[curr_coords.x][curr_coords.y] = ' ';
-        printMatrix(matrix_temp, m, n);
+        // printMatrix(matrix_temp, m, n);
         found = addNeighbors(&curr_coords, &head, matrix, m, n, end);
     }
 
@@ -260,18 +260,41 @@ int main()
     struct timeval time2; // Finish time
     long dt;              // Delta time (us)
 
+    char maze[441] = "SOXXXXXXXXXXXXXXXXXXXOOXOOOOOXOOOOOOOXOOOXXOXXXOXXXOXOXXXXXXXOXXOOOOOOOOOXOXOXOOOOOXXXXXXOXOXXXOXOXOXXXOXXOOOOOXOXOOOOOOOOOXOXXOXXXOXXXXXOXXXXXXXXXXOXOXOXOXOOOXOOOOOOOXXXXOXXXOXOXXXOXXXXXOXXOOOOOXOOOOOOOXOXOXOXXOXOXXXOXXXXXXXOXOXOXXOXOXOOOXOOOOOOOOOOOXXXXOXOXXXOXOXXXXXXXXXXOOOXOOOXOXOOOOOOOOOXXOXOXXXOXXXOXOXOXOXXXXOXOXOOOXOOOXOXOXOOOXXOXXXOXXXXXXXXXXXOXXXXOOOOOXOXOOOOOXOOOXOXXOXXXXXOXOXXXXXOXOXOXXOOOOOOOOOOOXOOOXOOOXXXXXXXXXXXXXXXXXXXXEX";
     // Variables
-    int m = 8, n = 7;
-    char matrix[MAX_COL][MAX_ROW] = {
-        {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-        {'O', 'O', 'X', 'X', 'X', 'X', 'O'},
-        {'O', 'O', 'O', 'O', 'E', 'O', 'O'},
-    };
+
+    int m = 21, n = 21;
+
+    char matrix[MAX_COL][MAX_ROW];
+
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i][j] = maze[i * 21 + j];
+        }
+    }
+
+    // char matrix[MAX_COL][MAX_ROW] = {
+    //     {'S', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'X', 'X', 'X', 'X', 'X'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'O', 'O', 'X', 'X', 'X'},
+    //     {'O', 'O', 'O', 'O', 'O', 'O', 'O'},
+    //     {'X', 'X', 'X', 'O', 'O', 'O', 'O'},
+    //     {'O', 'X', 'O', 'O', 'O', 'O', 'O'},
+    //     {'O', 'X', 'O', 'O', 'X', 'X', 'X'},
+    //     {'O', 'O', 'X', 'O', 'O', 'O', 'O'},
+    //     {'O', 'O', 'X', 'X', 'X', 'X', 'O'},
+    //     {'O', 'O', 'O', 'X', 'E', 'X', 'O'},
+    // };
 
     gettimeofday(&time1, NULL);
     aStar(matrix, m, n);
