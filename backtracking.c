@@ -4,8 +4,8 @@
 #include <string.h>
 #include "definisiFungsi.h"
 
-#define MAX_ROWS 100
-#define MAX_COLS 100
+#define MAX_ROWS 255
+#define MAX_COLS 255
 
 typedef struct
 {
@@ -66,6 +66,11 @@ int main_back()
 
     fclose(file);
 
+    // Alokasi Memori
+    Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
+    Cell *shortestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
+    Cell *longestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
+
     // Mencetak Shortest Path
     printf("\nShortest Path:\n");
     findShortestPath(maze, rows, cols, start, end);
@@ -86,6 +91,11 @@ int main_back()
     maze[end.row][end.col] = '1';
     printMaze_back(maze, rows, cols);
 
+    // Free Memori
+    free(path);
+    free(shortestPath);
+    free(longestPath);
+
     return 0;
 }
 
@@ -99,8 +109,8 @@ bool isValid_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int row, in
 void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell start, Cell end)
 {
     // Array untuk Menyimpan Path
-    Cell path[MAX_ROWS * MAX_COLS];
-    Cell shortestPath[MAX_ROWS * MAX_COLS];
+    Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
+    Cell *shortestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     int minLength = rows * cols + 1;
 
     // Menandai Posisi Start sudah dilalui
@@ -114,6 +124,10 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     {
         maze[shortestPath[i].row][shortestPath[i].col] = '1';
     }
+
+    // Free Memori
+    free(path);
+    free(shortestPath);
 }
 
 // Fungsi untuk Backtracking Shortest Path
@@ -172,8 +186,8 @@ void backtrackShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Ce
 void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell start, Cell end)
 {
     // Array untuk Menyimpan Path
-    Cell path[MAX_ROWS * MAX_COLS];
-    Cell longestPath[MAX_ROWS * MAX_COLS];
+    Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
+    Cell *longestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     int maxLength = 0;
 
     // Menandai Posisi Start sudah dilalui
@@ -187,6 +201,10 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     {
         maze[longestPath[i].row][longestPath[i].col] = '1';
     }
+
+    // Free Memori
+    free(path);
+    free(longestPath);
 }
 
 // Fungsi untuk Backtracking Longest Path
