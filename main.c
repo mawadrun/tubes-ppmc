@@ -58,7 +58,7 @@ int main()
         main_dijkstra();
     }
     else if(pilihanAlgorithm == 6){
-        int x = main_divide();
+        main_divide();
     }
     else if(pilihanAlgorithm == 7){
         main_bfs();
