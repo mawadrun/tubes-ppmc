@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
+#include "definisiFungsi.h"
 
 typedef struct point{
     // baris adalah y, kolom adalah x
@@ -19,7 +20,7 @@ int shortestPath = 65025;           // menyimpan panjang jalur yang terpendek
 char bentukShortestPath[255][255];  // menyimpan rute jalur terpendek
 
 // fungsi ini digunakan untuk mengecek apakah koordinat suatu point valid atau tidak
-bool isValid(char maze[255][255], point* currentPoint, int baris, int kolom) {
+bool isValid_divide(char maze[255][255], point* currentPoint, int baris, int kolom) {
     if(currentPoint->x >= 0 && currentPoint->x < kolom && currentPoint->y >= 0 && currentPoint->y < baris 
     && maze[currentPoint->y][currentPoint->x] != '#' && maze[currentPoint->y][currentPoint->x] != 'x'){
         return true;
@@ -39,11 +40,11 @@ void savePath(char sumber[255][255], char destinasi[255][255], int baris, int ko
 }
 
 // fungsi ini digunakan untuk meng-print maze jika sudah ditemukan sebuah jalur
-void printMaze(char maze[255][255], int baris, int kolom, int pathLength, bool simpanMaze, FILE* fptr){
+void printMaze_divide(char maze[255][255], int baris, int kolom, int pathLength, bool simpanMaze, FILE* fptr){
     pathCount++;
 
 
-    // fungsi printMaze() dapat digunakan untuk menyimpan rute maze terpanjang/terpendek
+    // fungsi printMaze_divide() dapat digunakan untuk menyimpan rute maze terpanjang/terpendek
     if(simpanMaze){
         if(pathLength > longestPath) {
             longestPath = pathLength;
@@ -96,7 +97,7 @@ void printMaze(char maze[255][255], int baris, int kolom, int pathLength, bool s
 void divideAndConquer(char maze[255][255], point* currentPoint, int baris, int kolom, point* end, int pathLength, FILE* fptr) {
     if (currentPoint->x == end->x && currentPoint->y == end->y) {     // kasus basis: koordinat point sama dengan koordinat end
         maze[end->y][end->x] = 'x';
-        printMaze(maze, baris, kolom, pathLength+1, true, fptr);  // mencetak maze
+        printMaze_divide(maze, baris, kolom, pathLength+1, true, fptr);  // mencetak maze
         maze[end->y][end->x] = 'E';
         return ;
     }
@@ -116,7 +117,7 @@ void divideAndConquer(char maze[255][255], point* currentPoint, int baris, int k
         // perhatikan bahwa point berikutnya memiliki koordinat (nextX, nextY)
         // point berikutnya adalah perubahan koordinat point saat ini pada sumbu-x saja atau sumbu-y saja
 
-        if (isValid(maze, nextPoint, baris, kolom)) {
+        if (isValid_divide(maze, nextPoint, baris, kolom)) {
             divideAndConquer(maze, nextPoint, baris, kolom, end, pathLength+1, fptr);
             // setiap kali divideAndConquer() dipanggil, pathLength bertambah 1
         }
@@ -140,42 +141,9 @@ void cariKoordinat(point* titik, char huruf, int baris, int kolom, char matriks[
     }
 }
 
-
-
-char matriks[255][255];     // untuk menyimpan file external ke variabel di program
-int baris = 0;              // untuk menyimpan jumlah baris dari maze
-int kolom = 0;              // untuk menyimpan jumlah baris dari kolom
-
-// fungsi ini digunakan untuk membaca file external, lalu menyimpan isinya dalam bentuk matriks
-void bacaFile(){
-    // Membaca file external
-    printf("Masukkan nama file yang akan dibaca: ");
-    char inputFile[255];
-    scanf("%s", &inputFile);
-
-    FILE* fp = fopen(inputFile, "r");
-    while (fp == NULL){
-        printf("File tidak bisa dibuka\n");
-        printf("Masukkan nama file yang akan dibaca: ");
-        scanf("%s", &inputFile);
-        fp = fopen(inputFile, "r");
-    }
-
-    // menyalin isi file external ke variabel lokal, sekaligus menghitung jumlah baris di file external tersebut
-    while(fgets(matriks[baris], 255, fp)){
-        baris++;
-    }
-
-    // menghitung hitung banyak kolom di file external
-    while(matriks[0][kolom] != '\0'){
-        kolom++;
-    }
-    kolom--;
-}
-
-int main(void) {    
+int main_divide(void) {    
     // memanggil fungsi bacaFile() untuk membaca file external
-    bacaFile();
+    // bacaFile();
     
     // ___ kode di bawah ini untuk mengecek hasil baca file .txt
     // printf("\nBentuk maze-nya:\n");
@@ -219,11 +187,11 @@ int main(void) {
         printf("Ada %d rute\n", pathCount);
 
         printf("Panjang rute terpanjang: %d\n", longestPath);
-        printMaze(bentukLongestPath, baris, kolom, longestPath, false, fptr);
+        printMaze_divide(bentukLongestPath, baris, kolom, longestPath, false, fptr);
 
 
         printf("Panjang rute terpendek: %d\n", shortestPath);
-        printMaze(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
+        printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
 
         // menampilkan waktu eksekusi
         cpu_time_used = ((double) (stopTime - startTime)) / CLOCKS_PER_SEC;

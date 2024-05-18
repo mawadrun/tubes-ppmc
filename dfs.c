@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "definisiFungsi.h"
 
 #define MAX_SIZE 2000
 
@@ -219,7 +220,7 @@ void DFS(int totalRows, int totalCols, char maze[totalRows][totalCols] ,  int ta
     return ;
 }
 
-int main() {
+int main_dfs() {
     // Labirin
     char labyrinth[10][10] = {
         {'#', '#', '#', '#', '#', '#', '#', '#', '.', '.'},

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "definisiFungsi.h"
 
 #define MAX_ROWS 100
 #define MAX_COLS 100
@@ -15,9 +16,9 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
 void backtrackShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell current, Cell end, int currLength, int *minLength, Cell path[], Cell shortestPath[]);
 void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell start, Cell end);
 void backtrackLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell current, Cell end, int currLength, int *maxLength, Cell path[], Cell longestPath[]);
-void printMaze(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
+void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
 
-int main() {
+int main_back() {
     char maze[MAX_ROWS][MAX_COLS];
     Cell start, end;
     int rows = 0, cols = 0; // Inisialisasi Baris dan Kolom
@@ -62,7 +63,7 @@ int main() {
     findShortestPath(maze, rows, cols, start, end);
     maze[start.row][start.col] = '1'; 
     maze[end.row][end.col] = '1'; 
-    printMaze(maze, rows, cols);
+    printMaze_back(maze, rows, cols);
 
     // Mencetak Longest Path
     printf("\nLongest Path:\n");
@@ -74,13 +75,13 @@ int main() {
     }
     maze[start.row][start.col] = '1'; 
     maze[end.row][end.col] = '1'; 
-    printMaze(maze, rows, cols);
+    printMaze_back(maze, rows, cols);
 
     return 0;
 }
 
 // Fungsi untuk Mengecek Validasi Cell pada Matriks Labirin
-bool isValid(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int row, int col) {
+bool isValid_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int row, int col) {
     return (row >= 0 && row < rows && col >= 0 && col < cols && maze[row][col] != '#');
 }
 
@@ -117,28 +118,28 @@ void backtrackShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Ce
     }
 
     // Melakukan Pengecekan ke Segala Arah
-    if (isValid(maze, rows, cols, current.row - 1, current.col)) { // Arah Atas
+    if (isValid_back(maze, rows, cols, current.row - 1, current.col)) { // Arah Atas
         Cell next = {current.row - 1, current.col};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackShortestPath(maze, rows, cols, next, end, currLength + 1, minLength, path, shortestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row + 1, current.col)) { // Arah Bawah
+    if (isValid_back(maze, rows, cols, current.row + 1, current.col)) { // Arah Bawah
         Cell next = {current.row + 1, current.col};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackShortestPath(maze, rows, cols, next, end, currLength + 1, minLength, path, shortestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row, current.col - 1)) { // Arah Kiri
+    if (isValid_back(maze, rows, cols, current.row, current.col - 1)) { // Arah Kiri
         Cell next = {current.row, current.col - 1};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackShortestPath(maze, rows, cols, next, end, currLength + 1, minLength, path, shortestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row, current.col + 1)) { // Arah Kanan
+    if (isValid_back(maze, rows, cols, current.row, current.col + 1)) { // Arah Kanan
         Cell next = {current.row, current.col + 1};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
@@ -180,28 +181,28 @@ void backtrackLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cel
     }
 
     // Melakukan Pengecekan ke Segala Arah
-    if (isValid(maze, rows, cols, current.row - 1, current.col)) { // Arah Atas
+    if (isValid_back(maze, rows, cols, current.row - 1, current.col)) { // Arah Atas
         Cell next = {current.row - 1, current.col};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackLongestPath(maze, rows, cols, next, end, currLength + 1, maxLength, path, longestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row + 1, current.col)) { // Arah Bawah
+    if (isValid_back(maze, rows, cols, current.row + 1, current.col)) { // Arah Bawah
         Cell next = {current.row + 1, current.col};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackLongestPath(maze, rows, cols, next, end, currLength + 1, maxLength, path, longestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row, current.col - 1)) { // Arah Kiri
+    if (isValid_back(maze, rows, cols, current.row, current.col - 1)) { // Arah Kiri
         Cell next = {current.row, current.col - 1};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
         backtrackLongestPath(maze, rows, cols, next, end, currLength + 1, maxLength, path, longestPath);
         maze[next.row][next.col] = '.';
     }
-    if (isValid(maze, rows, cols, current.row, current.col + 1)) { // Arah Kanan
+    if (isValid_back(maze, rows, cols, current.row, current.col + 1)) { // Arah Kanan
         Cell next = {current.row, current.col + 1};
         maze[next.row][next.col] = '#';
         path[currLength] = next;
@@ -211,7 +212,7 @@ void backtrackLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cel
 }
 
 // Fungsi untuk Mencetak Path yang dilalui
-void printMaze(char maze[MAX_ROWS][MAX_COLS], int rows, int cols) {
+void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             printf("%c ", maze[i][j]);

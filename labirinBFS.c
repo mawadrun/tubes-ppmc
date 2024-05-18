@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "definisiFungsi.h"
 
 #define ROW 225
 
@@ -9,11 +10,11 @@
 typedef struct {
     int x;
     int y;
-} Point;
+} Point_bfs;
 
 // Struct untuk queue yang digunakan pada BFS 
 typedef struct {
-    Point coordinate;
+    Point_bfs coordinate;
     int dist;
 } queueNode;
 
@@ -44,7 +45,7 @@ bool isEmpty(Queue* queue) {
     return (queue->size == 0);
 }
 
-void enqueue(Queue* queue, queueNode item) {
+void enqueue_bfs(Queue* queue, queueNode item) {
     if (isFull(queue))
         return;
     queue->rear = (queue->rear + 1) % queue->capacity;
@@ -52,7 +53,7 @@ void enqueue(Queue* queue, queueNode item) {
     queue->size = queue->size + 1;
 }
 
-queueNode dequeue(Queue* queue) {
+queueNode dequeue_bfs(Queue* queue) {
     queueNode item = { {-1, -1}, -1 };
     if (isEmpty(queue)) {
         return item;
@@ -115,12 +116,12 @@ void findStartStop(char** Map, int rows, int columns, int* startRow, int* startC
 }
 
 // Mengecek vertex valid atau tidak
-bool isValid(int row, int col, int rows, int columns) {
+bool isValid_bfs(int row, int col, int rows, int columns) {
     return (row >= 0) && (row < rows) && (col >= 0) && (col < columns);
 }
 
 // BFS untuk menemukan jalur terpendek
-int BFS(char** Map, Point src, Point dest, int rows, int columns, int** visited, Point** parent) {
+int BFS(char** Map, Point_bfs src, Point_bfs dest, int rows, int columns, int** visited, Point_bfs** parent) {
     if (Map[src.x][src.y] == '#' || Map[dest.x][dest.y] == '#')
         return -1;
 
@@ -129,12 +130,12 @@ int BFS(char** Map, Point src, Point dest, int rows, int columns, int** visited,
 
     Queue* queue = createQueue(rows * columns);
     queueNode s = {src, 0};
-    enqueue(queue, s);
+    enqueue_bfs(queue, s);
     visited[src.x][src.y] = 1;
 
     while (!isEmpty(queue)) {
-        queueNode curr = dequeue(queue);
-        Point pt = curr.coordinate;
+        queueNode curr = dequeue_bfs(queue);
+        Point_bfs pt = curr.coordinate;
 
         if (pt.x == dest.x && pt.y == dest.y)
             return curr.dist;
@@ -143,11 +144,11 @@ int BFS(char** Map, Point src, Point dest, int rows, int columns, int** visited,
             int row = pt.x + rowNum[i];
             int col = pt.y + colNum[i];
 
-            if (isValid(row, col, rows, columns) && Map[row][col] != '#' && !visited[row][col]) {
+            if (isValid_bfs(row, col, rows, columns) && Map[row][col] != '#' && !visited[row][col]) {
                 visited[row][col] = 1;
                 parent[row][col] = pt;
                 queueNode Adjcell = {{row, col}, curr.dist + 1};
-                enqueue(queue, Adjcell);
+                enqueue_bfs(queue, Adjcell);
             }
         }
     }
@@ -156,15 +157,15 @@ int BFS(char** Map, Point src, Point dest, int rows, int columns, int** visited,
 }
 
 // Fungsi untuk nge-print path
-void printPath(Point** parent, Point dest, char** pathMatrix) {
-    Point curr = dest;
+void printPath(Point_bfs** parent, Point_bfs dest, char** pathMatrix) {
+    Point_bfs curr = dest;
     while (parent[curr.x][curr.y].x != -1 && parent[curr.x][curr.y].y != -1) {
         pathMatrix[curr.x][curr.y] = '1';
         curr = parent[curr.x][curr.y];
     }
 }
 
-int main() {
+int main_bfs() {
     // Input nama file
     char fileName[50];
     printf("Masukkan File TXT Struktur Maze: ");
@@ -207,11 +208,11 @@ int main() {
     // Mencari source dan destination
     int startRow, startCol, stopRow, stopCol;
     findStartStop(Map, rows, columns, &startRow, &startCol, &stopRow, &stopCol);
-    printf("Start point: %d, %d\n", startCol, startRow);
-    printf("Stop point: %d, %d\n", stopCol, stopRow);
+    printf("Start Point_bfs: %d, %d\n", startCol, startRow);
+    printf("Stop Point_bfs: %d, %d\n", stopCol, stopRow);
 
-    Point source = {startRow, startCol};
-    Point dest = {stopRow, stopCol};
+    Point_bfs source = {startRow, startCol};
+    Point_bfs dest = {stopRow, stopCol};
 
     // Alokasi memori untuk matriks visited
     int** visited = (int**)malloc(rows * sizeof(int*));
@@ -220,9 +221,9 @@ int main() {
         memset(visited[i], 0, columns * sizeof(int));
     }
 
-    Point** parent = (Point**)malloc(rows * sizeof(Point*));
+    Point_bfs** parent = (Point_bfs**)malloc(rows * sizeof(Point_bfs*));
     for (int i = 0; i < rows; i++) {
-        parent[i] = (Point*)malloc(columns * sizeof(Point));
+        parent[i] = (Point_bfs*)malloc(columns * sizeof(Point_bfs));
         for (int j = 0; j < columns; j++) {
             parent[i][j].x = -1;
             parent[i][j].y = -1;

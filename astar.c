@@ -2,6 +2,7 @@
 #include <sys/time.h>
 #include <math.h>
 #include <stdlib.h>
+#include "definisiFungsi.h"
 
 #define MAX_ROW 256
 #define MAX_COL 256
@@ -44,7 +45,7 @@ int isSameCoords(struct Coords p1, struct Coords p2)
 }
 
 // Memasukkan coords ke priority queue head dengan mempertahankan keterurutan priority queue berdasarkan cost y = g + h, dari yang terpendek.
-void enqueue(struct Coords coords, struct PriorityQueueNode **head)
+void enqueue_astar(struct Coords coords, struct PriorityQueueNode **head)
 {
     // Case priority queue masih kosong, simpan coords sebagai elemen pertama
     if (*head == NULL)
@@ -71,8 +72,8 @@ void enqueue(struct Coords coords, struct PriorityQueueNode **head)
     }
 }
 
-// dequeue biasa
-struct Coords dequeue(struct PriorityQueueNode **head)
+// dequeue_astar biasa
+struct Coords dequeue_astar(struct PriorityQueueNode **head)
 {
     struct Coords val = (*head)->coords;
     *head = (*head)->next;
@@ -147,7 +148,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         {
             return 1;
         }
-        enqueue(new_coords, head);
+        enqueue_astar(new_coords, head);
     }
     if (matrix[coords->x][coords->y + 1] != '#' && matrix[coords->x][coords->y + 1] != '0' && coords->y + 1 < n)
     {
@@ -160,7 +161,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         {
             return 1;
         }
-        enqueue(new_coords, head);
+        enqueue_astar(new_coords, head);
     }
     if (matrix[coords->x - 1][coords->y] != '#' && matrix[coords->x - 1][coords->y] != '0' && coords->x - 1 >= 0)
     {
@@ -173,7 +174,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         {
             return 1;
         }
-        enqueue(new_coords, head);
+        enqueue_astar(new_coords, head);
     }
     if (matrix[coords->x][coords->y - 1] != '#' && matrix[coords->x][coords->y - 1] != '0' && coords->y - 1 >= 0)
     {
@@ -186,7 +187,7 @@ int addNeighbors(struct Coords *coords, struct PriorityQueueNode **head, char ma
         {
             return 1;
         }
-        enqueue(new_coords, head);
+        enqueue_astar(new_coords, head);
     }
     return 0;
 }
@@ -228,7 +229,7 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
         // }
         // printf("\n");
         matrix[curr_coords->x][curr_coords->y] = '0'; // tandai titik yang telah ditelusuri
-        *curr_coords = dequeue(&head);
+        *curr_coords = dequeue_astar(&head);
         found = addNeighbors(curr_coords, &head, matrix, m, n, end);
     }
 
@@ -248,7 +249,7 @@ int aStar(char matrix[MAX_COL][MAX_ROW], int m, int n, struct Coords start, stru
     }
 }
 
-int main()
+int main_astar()
 {
     struct timeval time1; // Start time
     struct timeval time2; // Finish time

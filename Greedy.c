@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 #include<math.h>
-
+#include "definisiFungsi.h"
 
 int findallpaths(int m, int n, char matrix[m][n], int prev[2], int current[2], int end[2]){
     int i, j, nextc[2], found = 0, corner = 0;
@@ -162,7 +162,7 @@ if(!(nextc[0] == prev[0] && nextc[1] == prev[1]))
 }
 
 
-int main(void) {
+int main_greedy(void) {
     int i = 0,j = 0, m = 1, n, start[2], end[2], prev[2], found = 0;
     char filename[255], buff[255];
     
