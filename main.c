@@ -2,7 +2,7 @@
 #include "backtracking.c"
 #include "dfs.c"
 #include "dijkstra.c"
-#include "divide&conquer.c"
+#include "divideAndConquer.c"
 #include "labirinBFS.c"
 
 int main()
