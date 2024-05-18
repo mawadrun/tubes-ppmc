@@ -40,7 +40,7 @@ int main()
     printf("6. divide and conquer\n");    
     printf("7. BFS\n");
     printf("> ");
-    scanf("%d", pilihanAlgorithm);
+    scanf("%d", &pilihanAlgorithm);
 
     if(pilihanAlgorithm == 1){
         main_greedy();
@@ -58,7 +58,7 @@ int main()
         main_dijkstra();
     }
     else if(pilihanAlgorithm == 6){
-        main_divide();
+        int x = main_divide();
     }
     else if(pilihanAlgorithm == 7){
         main_bfs();
