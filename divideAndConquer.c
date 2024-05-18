@@ -93,7 +93,7 @@ void printMaze(char maze[255][255], int baris, int kolom, int pathLength, bool s
 }
 
 // fungsi ini adalah fungsi rekursif. Digunakan untuk mencari jalur dari start sampai end
-void cariRute(char maze[255][255], point* currentPoint, int baris, int kolom, point* end, int pathLength, FILE* fptr) {
+void divideAndConquer(char maze[255][255], point* currentPoint, int baris, int kolom, point* end, int pathLength, FILE* fptr) {
     if (currentPoint->x == end->x && currentPoint->y == end->y) {     // kasus basis: koordinat point sama dengan koordinat end
         maze[end->y][end->x] = 'x';
         printMaze(maze, baris, kolom, pathLength+1, true, fptr);  // mencetak maze
@@ -117,8 +117,8 @@ void cariRute(char maze[255][255], point* currentPoint, int baris, int kolom, po
         // point berikutnya adalah perubahan koordinat point saat ini pada sumbu-x saja atau sumbu-y saja
 
         if (isValid(maze, nextPoint, baris, kolom)) {
-            cariRute(maze, nextPoint, baris, kolom, end, pathLength+1, fptr);
-            // setiap kali cariRute() dipanggil, pathLength bertambah 1
+            divideAndConquer(maze, nextPoint, baris, kolom, end, pathLength+1, fptr);
+            // setiap kali divideAndConquer() dipanggil, pathLength bertambah 1
         }
     }
 
@@ -140,7 +140,14 @@ void cariKoordinat(point* titik, char huruf, int baris, int kolom, char matriks[
     }
 }
 
-int main(void) {    
+
+
+char matriks[255][255];     // untuk menyimpan file external ke variabel di program
+int baris = 0;              // untuk menyimpan jumlah baris dari maze
+int kolom = 0;              // untuk menyimpan jumlah baris dari kolom
+
+// fungsi ini digunakan untuk membaca file external, lalu menyimpan isinya dalam bentuk matriks
+void bacaFile(){
     // Membaca file external
     printf("Masukkan nama file yang akan dibaca: ");
     char inputFile[255];
@@ -155,18 +162,20 @@ int main(void) {
     }
 
     // menyalin isi file external ke variabel lokal, sekaligus menghitung jumlah baris di file external tersebut
-    char matriks[255][255];
-    int baris = 0;
     while(fgets(matriks[baris], 255, fp)){
         baris++;
     }
 
     // menghitung hitung banyak kolom di file external
-    int kolom = 0;
     while(matriks[0][kolom] != '\0'){
         kolom++;
     }
     kolom--;
+}
+
+int main(void) {    
+    // memanggil fungsi bacaFile() untuk membaca file external
+    bacaFile();
     
     // ___ kode di bawah ini untuk mengecek hasil baca file .txt
     // printf("\nBentuk maze-nya:\n");
@@ -191,15 +200,15 @@ int main(void) {
     clock_t startTime, stopTime;
     double cpu_time_used;
 
-
+    // meng-inisiasi file txt eksternal untuk menyimpan semua kemungkinan maze yang ditemukan
     FILE* fptr;
     fptr = fopen("testtxt.txt", "w");
 
+
     startTime = clock();
-
-    cariRute(matriks, start, baris, kolom, end, 0, fptr);
-
+    divideAndConquer(matriks, start, baris, kolom, end, 0, fptr);
     stopTime = clock();
+
     fclose(fptr);
 
 
