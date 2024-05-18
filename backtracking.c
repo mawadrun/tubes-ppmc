@@ -4,8 +4,8 @@
 #include <string.h>
 #include "definisiFungsi.h"
 
-#define MAX_ROWS 100
-#define MAX_COLS 100
+#define MAX_ROWS MAX_ROW
+#define MAX_COLS MAX_COL
 
 typedef struct
 {
@@ -19,52 +19,57 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
 void backtrackLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell current, Cell end, int currLength, int *maxLength, Cell path[], Cell longestPath[]);
 void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
 
-int main_back()
+int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, int start_col, int end_row, int end_col)
 {
-    char maze[MAX_ROWS][MAX_COLS];
+    // char maze[MAX_ROWS][MAX_COLS];
     Cell start, end;
-    int rows = 0, cols = 0; // Inisialisasi Baris dan Kolom
+    start.col = start_col;
+    start.row = start_row;
+    end.col = end_col;
+    end.row = end_row;
+    // int rows = 0, cols = 0; // Inisialisasi Baris dan Kolom
 
-    char filename[100];
-    printf("\nMasukkan Nama File: ");
-    scanf("%s", filename);
+    // char filename[100];
+    // printf("\nMasukkan Nama File: ");
+    // scanf("%s", filename);
 
-    // Membuka File
-    FILE *file = fopen(filename, "r");
-    if (file == NULL)
-    {
-        fprintf(stderr, "Cannot open file\n");
-        return 1;
-    }
+    // // Membuka File
+    // FILE *file = fopen(filename, "r");
+    // if (file == NULL)
+    // {
+    //     fprintf(stderr, "Cannot open file\n");
+    //     return 1;
+    // }
 
-    // Membaca Labirin
-    int row = 0;
-    while (fscanf(file, "%s", maze[row]) != EOF)
-    {
-        int current_cols = strlen(maze[row]);
-        if (current_cols > cols)
-            cols = current_cols;
+    // // Membaca Labirin
+    // int row = 0;
+    // while (fscanf(file, "%s", maze[row]) != EOF)
+    // {
+    //     int current_cols = strlen(maze[row]);
+    //     if (current_cols > cols)
+    //         cols = current_cols;
 
-        // Mencari Posisi Start dan End
-        for (int j = 0; j < current_cols; j++)
-        {
-            if (maze[row][j] == 'S')
-            {
-                start.row = row;
-                start.col = j;
-            }
-            else if (maze[row][j] == 'E')
-            {
-                end.row = row;
-                end.col = j;
-            }
-        }
-        row++;
+    //     // Mencari Posisi Start dan End
+    //     for (int j = 0; j < current_cols; j++)
+    //     {
+    //         if (maze[row][j] == 'S')
+    //         {
+    //             start.row = row;
+    //             start.col = j;
+    //         }
+    //         else if (maze[row][j] == 'E')
+    //         {
+    //             end.row = row;
+    //             end.col = j;
+    //         }
+    //     }
+    //     row++;
 
-        rows++;
-    }
+    //     rows++;
+    // }
 
-    fclose(file);
+    // fclose(file);
+    printMatrix(maze, rows, cols);
 
     // Mencetak Shortest Path
     printf("\nShortest Path:\n");

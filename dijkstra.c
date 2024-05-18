@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <time.h>
 #include "definisiFungsi.h"
-#define MAX 255
+#define MAX MAX_ROW
 
 typedef struct
 {

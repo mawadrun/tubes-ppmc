@@ -69,6 +69,7 @@ int main()
         end_point.x = akhir.y;
         end_point.y = akhir.x;
         dijkstra(matriks, baris, kolom, start_point, end_point);
+        printMaze(matriks, baris, kolom);
     }
     else if (pilihanAlgorithm == 6)
     {
