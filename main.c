@@ -49,21 +49,28 @@ int main()
     printf("> ");
     scanf("%d", &pilihanAlgorithm);
 
+    clock_t startTime, stopTime;
+    startTime = clock();
+
     if (pilihanAlgorithm == 1)
     {
         main_greedy();
+        stopTime = clock();
     }
     else if (pilihanAlgorithm == 2)
     {
         aStar(matriks, baris, kolom, awal, akhir);
+        stopTime = clock();
     }
     else if (pilihanAlgorithm == 3)
     {
-        main_back(matriks, baris, kolom, awal.x, awal.y, akhir.x, akhir.y); // error
+        main_back(matriks, baris, kolom, awal.x, awal.y, akhir.x, akhir.y);
+        stopTime = clock();
     }
     else if (pilihanAlgorithm == 4)
     {
         DFS(kolom, baris, matriks, akhir.x, akhir.y, awal.y, awal.x);
+        stopTime = clock();
     }
     else if (pilihanAlgorithm == 5)
     {
@@ -73,6 +80,7 @@ int main()
         end_point.x = akhir.y;
         end_point.y = akhir.x;
         dijkstra(matriks, baris, kolom, start_point, end_point);
+        stopTime = clock();
     }
     else if (pilihanAlgorithm == 6)
     {
@@ -80,38 +88,29 @@ int main()
         fptr = fopen("output.txt", "w");
         
         divideAndConquer(matriks, start, baris, kolom, end, 0, fptr);
+        stopTime = clock();
         
         // // TES OUTPUT
-        // printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
+        printf("\nShortest path: (%d)\n", shortestPath);
+        printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
+        printf("\nLongest path: (%d)\n", longestPath);
+        printMaze_divide(bentukLongestPath, baris, kolom, longestPath, false, fptr);
     }
     else if (pilihanAlgorithm == 7)
     {
         Point_bfs source = {start->y, start->x};
         Point_bfs dest = {end->y, end->x};
         int step = BFS(matriks, source, dest, baris, kolom);
+        stopTime = clock();
         
         // // TES OUTPUT
-        // printf("Shortest path : %d steps\n", step);
-        // if (step != 1){
-        //     printf("Shortest path : \n");
-        //     for(int i = 0; i< baris; i++){
-        //         for(int j = 0; j<kolom; j++){
-        //             if(matriks[i][j] == 'V' || matriks[i][j] == 'S' || matriks[i][j] == 'E'){
-        //                 printf("%c ", matriks[i][j]);
-        //             }
-        //             else if(matriks[i][j] == '.'){
-        //                 printf(". ");
-        //             } else{
-        //                 printf("# ");
-        //             }
-        //         }
-        //         printf("\n");
-        //     }
-        // }
-        // else{
-        //     printf("Tidak ada jalur.\n");
-        // }        
+        printf("Shortest path : %d steps\n", step);
+        printMatrix(matriks, baris, kolom);
     }
+    
+    double cpu_time_used;
+    cpu_time_used = ((double) (stopTime - startTime)) / CLOCKS_PER_SEC;
+    printf("\nWaktu eksekusi: %.4f detik\n", cpu_time_used);
 
     return 0;
 }

@@ -28,7 +28,7 @@ int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, 
     end.col = end_col;
     end.row = end_row;
 
-    printMatrix(maze, rows, cols);
+    //printMatrix(maze, rows, cols);
 
     // Alokasi Memori
     Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
@@ -229,7 +229,12 @@ void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols)
     {
         for (int j = 0; j < cols; j++)
         {
-            printf("%c ", maze[i][j]);
+            if(maze[i][j] == '#' || maze[i][j] == '.'){
+                printf("%c ", maze[i][j]);
+            }
+            else{
+                printf("V ");
+            }
         }
         printf("\n");
     }
