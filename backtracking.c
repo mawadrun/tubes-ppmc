@@ -19,7 +19,7 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
 void backtrackLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell current, Cell end, int currLength, int *maxLength, Cell path[], Cell longestPath[]);
 void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
 
-int main()
+int main_back()
 {
     char maze[MAX_ROWS][MAX_COLS];
     Cell start, end;
