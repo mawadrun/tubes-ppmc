@@ -80,7 +80,6 @@ int main_back()
 
     // Mencetak Longest Path
     printf("\nLongest Path:\n");
-    Cell path[MAX_ROWS * MAX_COLS], longestPath[MAX_ROWS * MAX_COLS];
     int maxLength = 0;
     findLongestPath(maze, rows, cols, start, end);
     for (int i = 0; i < maxLength; i++)
