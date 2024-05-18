@@ -55,7 +55,7 @@ int main()
     }
     else if (pilihanAlgorithm == 3)
     {
-        main_back();
+        main_back(matriks, baris, kolom, awal.x, awal.y, akhir.x, akhir.y); // error
     }
     else if (pilihanAlgorithm == 4)
     {
@@ -63,7 +63,12 @@ int main()
     }
     else if (pilihanAlgorithm == 5)
     {
-        main_dijkstra();
+        Point_dijkstra start_point, end_point;
+        start_point.x = awal.y;
+        start_point.y = awal.x;
+        end_point.x = akhir.y;
+        end_point.y = akhir.x;
+        dijkstra(matriks, baris, kolom, start_point, end_point);
     }
     else if (pilihanAlgorithm == 6)
     {

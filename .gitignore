@@ -2,3 +2,4 @@
 *.exe
 /.vscode
 /astar_old.c
+/testtxt.txt
