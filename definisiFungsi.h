@@ -1,6 +1,5 @@
-char matriks[255][255];  // Menyimpan matriks labirin
-int baris;  // Jumlah baris dari labirin
-int kolom;  // Jumlah kolom dari labirin
+#define MAX_COL 255
+#define MAX_ROW 255
 
 // Deklarasi fungsi-fungsi yang akan digunakan di banyak file .c
 void bacaFile();

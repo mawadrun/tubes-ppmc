@@ -4,14 +4,18 @@
 #include "definisiFungsi.h"
 
 // fungsi ini digunakan untuk membaca file external, lalu menyimpan isinya dalam bentuk matriks
-void bacaFile(){
+void bacaFile(char matrix[MAX_ROW][MAX_COL], int *row, int *col)
+{
     // Membaca file external
+    int baris; // Jumlah baris dari labirin
+    int kolom; // Jumlah kolom dari labirin
     printf("Masukkan nama file yang akan dibaca: ");
-    char inputFile[255];
+    char inputFile[MAX_ROW];
     scanf("%s", &inputFile);
 
-    FILE* fp = fopen(inputFile, "r");
-    while (fp == NULL){
+    FILE *fp = fopen(inputFile, "r");
+    while (fp == NULL)
+    {
         printf("File tidak bisa dibuka\n");
         printf("Masukkan nama file yang akan dibaca: ");
         scanf("%s", &inputFile);
@@ -19,13 +23,17 @@ void bacaFile(){
     }
 
     // menyalin isi file external ke variabel lokal, sekaligus menghitung jumlah baris di file external tersebut
-    while(fgets(matriks[baris], 255, fp)){
+    while (fgets(matrix[baris], MAX_ROW, fp))
+    {
         baris++;
     }
 
     // menghitung hitung banyak kolom di file external
-    while(matriks[0][kolom] != '\0'){
+    while (matrix[0][kolom] != '\0')
+    {
         kolom++;
     }
     kolom--;
+    *row = baris;
+    *col = kolom;
 }
