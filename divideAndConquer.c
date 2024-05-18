@@ -5,12 +5,6 @@
 #include <time.h>
 #include "definisiFungsi.h"
 
-typedef struct point{
-    // baris adalah y, kolom adalah x
-    int x;
-    int y;
-} point;
-
 int pathCount = 0;                  // untuk menghitung banyak path
 
 int longestPath = 0;                // menyimpan panjang jalur yang terpanjang
@@ -129,17 +123,6 @@ void divideAndConquer(char maze[255][255], point* currentPoint, int baris, int k
     // jalur yang sebelumnya tidak akan terulangi karena menggunakan for loop.
 }
 
-void cariKoordinat(point* titik, char huruf, int baris, int kolom, char matriks[255][255]){
-    for(int i = 0; i<baris; i++){
-        for(int j = 0; j<kolom; j++){
-            if(matriks[i][j] == huruf){
-                titik->x = j;
-                titik->y = i;
-                matriks[i][j] = '.';
-            }
-        }
-    }
-}
 
 int main_divide(void) {    
     // memanggil fungsi bacaFile() untuk membaca file external

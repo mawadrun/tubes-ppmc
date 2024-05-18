@@ -29,3 +29,16 @@ void bacaFile(){
     }
     kolom--;
 }
+
+// untuk cari koordinat 'S' dan 'E'
+void cariKoordinat(point* titik, char huruf, int baris, int kolom, char matriks[255][255]){
+    for(int i = 0; i<baris; i++){
+        for(int j = 0; j<kolom; j++){
+            if(matriks[i][j] == huruf){
+                titik->x = j;
+                titik->y = i;
+                matriks[i][j] = '.';
+            }
+        }
+    }
+}
