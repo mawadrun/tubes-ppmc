@@ -27,10 +27,6 @@ int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, 
     start.row = start_row;
     end.col = end_col;
     end.row = end_row;
-    
-    char filename[100];
-    printf("\nMasukkan Nama File: ");
-    scanf("%s", filename);
 
     printMatrix(maze, rows, cols);
 
