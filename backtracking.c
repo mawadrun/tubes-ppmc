@@ -4,8 +4,8 @@
 #include <string.h>
 #include "definisiFungsi.h"
 
-#define MAX_ROWS MAX_ROW
-#define MAX_COLS MAX_COL
+#define MAX_ROWS 255
+#define MAX_COLS 255
 
 typedef struct
 {
@@ -21,7 +21,7 @@ void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
 
 int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, int start_col, int end_row, int end_col)
 {
-    char maze[MAX_ROWS][MAX_COLS];
+    // char maze[MAX_ROWS][MAX_COLS];
     Cell start, end;
     start.col = start_col;
     start.row = start_row;

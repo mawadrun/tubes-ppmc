@@ -2,111 +2,77 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "definisiFungsi.h"
 
-#define ROW 225
+#define ROW 255
+#define COL 255
 
 // Struct untuk menyimpan koordinat
 typedef struct {
-    int x;
+    int x;  
     int y;
 } Point_bfs;
 
-// Struct untuk queue yang digunakan pada BFS 
-typedef struct {
-    Point_bfs coordinate;
-    int dist;
-} queueNode;
+// Struct untuk node antrian
+typedef struct Qnode {
+    Point_bfs node;
+    struct Qnode* next;
+} Qnode;
 
 // Queue untuk BFS
 typedef struct {
-    int front, rear, size;
-    unsigned capacity;
-    queueNode* array;
+    Qnode *front, *rear;
 } Queue;
 
 // Create Queue
-Queue* createQueue(unsigned capacity) {
-    Queue* queue = (Queue*)malloc(sizeof(Queue));
-    queue->capacity = capacity;
-    queue->front = queue->size = 0;
-    queue->rear = capacity - 1;
-    queue->array = (queueNode*)malloc(queue->capacity * sizeof(queueNode));
-    return queue;
+Queue* createQueue(){
+    Queue* que = (Queue*)malloc(sizeof(Queue));
+    que->front = que->rear = NULL;
+    return que;
 }
 
-// Queue isFull
-bool isFull(Queue* queue) {
-    return (queue->size == queue->capacity);
-}
-
-// Queue is empty 
-bool isEmpty(Queue* queue) {
-    return (queue->size == 0);
-}
-
-void enqueue_bfs(Queue* queue, queueNode item) {
-    if (isFull(queue))
+// Enqueue
+void enQueue(Queue* que, Point_bfs point){
+    Qnode *temp = (Qnode*)malloc(sizeof(Qnode));
+    temp->node = point;
+    temp->next = NULL;
+    if (que->rear == NULL) {
+        que->front = que->rear = temp;
         return;
-    queue->rear = (queue->rear + 1) % queue->capacity;
-    queue->array[queue->rear] = item;
-    queue->size = queue->size + 1;
+    }
+    que->rear->next = temp;
+    que->rear = temp;
 }
 
-queueNode dequeue_bfs(Queue* queue) {
-    queueNode item = { {-1, -1}, -1 };
-    if (isEmpty(queue)) {
-        return item;
+// Dequeue
+Point_bfs deQueue(Queue* que){
+    if (que->front == NULL) {
+        return (Point_bfs){-1, -1};
     }
-    item = queue->array[queue->front];
-    queue->front = (queue->front + 1) % queue->capacity;
-    queue->size = queue->size - 1;
-    return item;
+    Qnode* temp = que->front;
+    Point_bfs point = temp->node;
+    que->front = que->front->next;
+    if (que->front == NULL) {
+        que->rear = NULL;
+    }
+    free(temp);
+    return point;
 }
 
-// Fungsi untuk menemukan ukuran matriks
-void findSize(FILE* file, int* col, int* row) {
-    char line[ROW];
-    *row = 0, *col = 0;
 
-    while (fgets(line, sizeof(line), file)) {
-        (*row)++;
-        if (*row == 1) {
-            char* token = strtok(line, " \t\n");
-            while (token != NULL) {
-                (*col)++;
-                token = strtok(NULL, " \t\n");
-            }
-        }
-    }
-}
-
-// Membaca dan mapping matrix
-void readMatrix(char** Map, FILE* file, int rows, int columns) {
-    char c;
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            do {
-                c = fgetc(file);
-            } while (c == ' ' || c == '\n' || c == '\t');
-            Map[i][j] = c;
-        }
-    }
+bool isEmpty(Queue* que) {
+    return (que->front == NULL);
 }
 
 // Menemukan source dan destination
-void findStartStop(char** Map, int rows, int columns, int* startRow, int* startCol, int* stopRow, int* stopCol) {
+void findStartStop(char Map[ROW][COL], int rows, int columns, int* startRow, int* startCol, int* stopRow, int* stopCol) { 
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < columns; j++) {
             if (Map[i][j] == 'S') {
                 *startRow = i;
                 *startCol = j;
             }
-        }
-    }
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
             if (Map[i][j] == 'E') {
                 *stopRow = i;
                 *stopCol = j;
@@ -116,159 +82,150 @@ void findStartStop(char** Map, int rows, int columns, int* startRow, int* startC
 }
 
 // Mengecek vertex valid atau tidak
-bool isValid_bfs(int row, int col, int rows, int columns) {
+bool isValid(int row, int col, int rows, int columns) {
     return (row >= 0) && (row < rows) && (col >= 0) && (col < columns);
 }
 
 // BFS untuk menemukan jalur terpendek
-int BFS(char** Map, Point_bfs src, Point_bfs dest, int rows, int columns, int** visited, Point_bfs** parent) {
-    if (Map[src.x][src.y] == '#' || Map[dest.x][dest.y] == '#')
-        return -1;
+int BFS(char Map[ROW][COL], Point_bfs source, Point_bfs destination, int row, int col)  {
+    bool visited[row][col];
+    Point_bfs parent[row][col];
+    int stepCount[row][col];
+    for(int i = 0; i < row; i++){
+        for(int j =  0; j < col; j++){
+            visited[i][j] = false; 
+            parent[i][j] = (Point_bfs){-1, -1};
+            stepCount[i][j] = 0; 
+        }
+    }
+
+    Queue* que = createQueue(); 
+    enQueue(que, source);
+    visited[source.x][source.y] = true;
 
     int rowNum[] = {-1, 0, 0, 1};
     int colNum[] = {0, -1, 1, 0};
 
-    Queue* queue = createQueue(rows * columns);
-    queueNode s = {src, 0};
-    enqueue_bfs(queue, s);
-    visited[src.x][src.y] = 1;
+    while(!isEmpty(que)){
+        Point_bfs curr = deQueue(que); 
+        if((curr.x == destination.x) && (curr.y == destination.y)) {
+            // Menandai jalur dari tujuan ke sumber
+            Point_bfs trace = curr;
+            while(parent[trace.x][trace.y].x != -1 && parent[trace.x][trace.y].y != -1){
 
-    while (!isEmpty(queue)) {
-        queueNode curr = dequeue_bfs(queue);
-        Point_bfs pt = curr.coordinate;
+                Map[trace.x][trace.y] = 'V';
 
-        if (pt.x == dest.x && pt.y == dest.y)
-            return curr.dist;
+                trace = parent[trace.x][trace.y];
+            }
 
-        for (int i = 0; i < 4; i++) {
-            int row = pt.x + rowNum[i];
-            int col = pt.y + colNum[i];
+            Map[source.x][source.y] = 'V';
+            Map[destination.x][destination.y] = 'V';
+            free(que);
+            return stepCount[curr.x][curr.y];
+        }
 
-            if (isValid_bfs(row, col, rows, columns) && Map[row][col] != '#' && !visited[row][col]) {
-                visited[row][col] = 1;
-                parent[row][col] = pt;
-                queueNode Adjcell = {{row, col}, curr.dist + 1};
-                enqueue_bfs(queue, Adjcell);
+        for (int i = 0; i < 4; i++){
+            int newRow = curr.x + rowNum[i];
+            int newCol = curr.y + colNum[i];
+            if(isValid(newRow, newCol, row, col) && Map[newRow][newCol] != '#' && !visited[newRow][newCol]){
+                visited[newRow][newCol] = true; 
+                parent[newRow][newCol] = curr; 
+                enQueue(que, (Point_bfs){newRow, newCol});
+                stepCount[newRow][newCol] = stepCount[curr.x][curr.y] + 1;
             }
         }
     }
-
+    printf("x = %d dan y = %d\n", destination.x, destination.y);
+            for(int i = 0; i< row; i++){
+                for(int j = 0; j<col; j++){
+                    if(Map[i][j] == 'V' || Map[i][j] == 'S' || Map[i][j] == 'E'){
+                        printf("%c", Map[i][j]);
+                    }
+                    else if(Map[i][j] == '.'){
+                        printf(".");
+                    } else{
+                        printf("#");
+                    }
+                }
+                printf("\n");
+            }
+    
+    free(que);
     return -1;
 }
 
-// Fungsi untuk nge-print path
-void printPath(Point_bfs** parent, Point_bfs dest, char** pathMatrix) {
-    Point_bfs curr = dest;
-    while (parent[curr.x][curr.y].x != -1 && parent[curr.x][curr.y].y != -1) {
-        pathMatrix[curr.x][curr.y] = '1';
-        curr = parent[curr.x][curr.y];
-    }
-}
-
 int main_bfs() {
-    // Input nama file
-    char fileName[50];
-    printf("Masukkan File TXT Struktur Maze: ");
-    scanf("%s", fileName);
+    // // Input nama file
+    // char fileName[50];
+    // printf("Masukkan File TXT Struktur Maze: ");
+    // scanf("%s", fileName);
 
-    // Membuka file
-    FILE* file = fopen(fileName, "r");
-    if (file == NULL) {
-        printf("File tidak bisa dibuka.\n");
-        return 1;
-    }
+    // // Membuka file
+    // FILE* file = fopen(fileName, "r");
+    // while(file == NULL){
+    //     printf("File tidak bisa dibuka.\n");
+    //     printf("Masukkan nama file yang dapat dibaca : ");
+    //     scanf("%s", fileName);
+    //     file = fopen(fileName, "r");
+    // }
 
-    // Menemukan ukuran matriks
-    int rows, columns;
-    findSize(file, &columns, &rows);
-    printf("File memiliki %d baris dan %d kolom\n", rows, columns);
-    fclose(file);
+    // Mapping file .txt dan menghitung baris serta kolom dan menghitung baris
+    // int row = 0;
+    // char Map[ROW][COL];
+    // while(fgets(Map[row], 255, file)){
+    //     row++;
+    // }
 
-    file = fopen(fileName, "r");
-    if (file == NULL) {
-        printf("File tidak bisa dibuka.\n");
-        return 1;
-    }
+    // // Menhitung Kolom
+    // int col = 0; 
+    // while(Map[0][col] != '\0'){
+    //     col++;
+    // }
+    // col = col-1;
 
-    // Mapping matrix
-    char** Map = (char**)malloc(rows * sizeof(char*));
-    for (int i = 0; i < rows; i++) {
-        Map[i] = (char*)malloc(columns * sizeof(char));
-    }
-    readMatrix(Map, file, rows, columns);
-    fclose(file);
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            printf("%c", Map[i][j]);
-        }
-        printf("\n");
-    }
-
+    // printf("Maze : \n");
+    // for(int i = 0; i<row; i++){
+    //     printf("%s", Map[i]);
+    // }
+    // printf("\n");
+    // printf("\n");
     // Mencari source dan destination
-    int startRow, startCol, stopRow, stopCol;
-    findStartStop(Map, rows, columns, &startRow, &startCol, &stopRow, &stopCol);
-    printf("Start Point_bfs: %d, %d\n", startCol, startRow);
-    printf("Stop Point_bfs: %d, %d\n", stopCol, stopRow);
+    // int startRow, startCol, stopRow, stopCol;
+    // findStartStop(Map, row, col, &startRow, &startCol, &stopRow, &stopCol);
+    // printf("Start point: %d, %d\n", startRow, startCol);
+    // printf("Stop point: %d, %d\n", stopRow,startCol);
+    // printf("\n");
 
-    Point_bfs source = {startRow, startCol};
-    Point_bfs dest = {stopRow, stopCol};
+    // Point_bfs source = {startRow, startCol};
+    // Point_bfs dest = {stopRow, stopCol};
 
-    // Alokasi memori untuk matriks visited
-    int** visited = (int**)malloc(rows * sizeof(int*));
-    for (int i = 0; i < rows; i++) {
-        visited[i] = (int*)malloc(columns * sizeof(int));
-        memset(visited[i], 0, columns * sizeof(int));
-    }
+    clock_t startTime, stopTime; 
+    double cpu_time_used;
+    // startTime = clock();
+    // int step = BFS(Map, source, dest, row, col);
+    // stopTime = clock();
+    // printf("Shortest path : %d steps\n", step);
+    // if (step != 1){
+    //     printf("Shortest path : \n");
+    //     for(int i = 0; i< row; i++){
+    //         for(int j = 0; j<col; j++){
+    //             if(Map[i][j] == 'V' || Map[i][j] == 'S' || Map[i][j] == 'E'){
+    //                 printf("%c", Map[i][j]);
+    //             }
+    //             else if(Map[i][j] == '.'){
+    //                 printf(".");
+    //             } else{
+    //                 printf("#");
+    //             }
+    //         }
+    //         printf("\n");
+    //     }
+    // }
+    // else{
+    //     printf("Tidak ada jalur.\n");
+    // }
 
-    Point_bfs** parent = (Point_bfs**)malloc(rows * sizeof(Point_bfs*));
-    for (int i = 0; i < rows; i++) {
-        parent[i] = (Point_bfs*)malloc(columns * sizeof(Point_bfs));
-        for (int j = 0; j < columns; j++) {
-            parent[i][j].x = -1;
-            parent[i][j].y = -1;
-        }
-    }
-
-    // Menghitung jarak terpendek
-    int dist = BFS(Map, source, dest, rows, columns, visited, parent);
-
-    // Alokasi memori untuk menampilkan path
-    char** pathMatrix = (char**)malloc(rows * sizeof(char*));
-    for (int i = 0; i < rows; i++) {
-        pathMatrix[i] = (char*)malloc(columns * sizeof(char));
-        memset(pathMatrix[i], '0', columns * sizeof(char));
-    }
-
-    // Mengeset jalur yang dilewati menjadi 1 dan 0 ketika tidak dilalui
-    if (dist != -1) {
-        printPath(parent, dest, pathMatrix);
-        pathMatrix[source.x][source.y] = '1'; 
-        printf("Shortest Path is %d\n", dist);
-    } else {
-        printf("Shortest Path doesn't exist\n");
-    }
-
-    // Menampilkan jarak terpendek
-    printf("Path Matrix:\n");
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            printf("%c ", pathMatrix[i][j]);
-        }
-        printf("\n");
-    }
-
-    // Free memori
-    for (int i = 0; i < rows; i++) {
-        free(Map[i]);
-        free(visited[i]);
-        free(parent[i]);
-        free(pathMatrix[i]);
-    }
-    free(Map);
-    free(visited);
-    free(parent);
-    free(pathMatrix);
-
+    cpu_time_used = ((double)stopTime-startTime)/CLOCKS_PER_SEC;
+    printf("Waktu yang diperlukan untuk mencari rute : %f detik", cpu_time_used);
     return 0; 
 }

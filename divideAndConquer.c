@@ -5,8 +5,7 @@
 #include <time.h>
 #include "definisiFungsi.h"
 
-typedef struct point
-{
+typedef struct point{
     // baris adalah y, kolom adalah x
     int x;
     int y;
@@ -75,11 +74,14 @@ void printMaze_divide(char maze[255][255], int baris, int kolom, int pathLength,
             {
                 if (maze[i][j] == 'x')
                 {
-                    fputc('1', fptr);
+                    fputs("V ", fptr);
                 }
-                else
+                else if(maze[i][j] == '#')
                 {
-                    fputc('_', fptr);
+                    fputs("# ", fptr);
+                }
+                else if(maze[i][j] == '.'){
+                    fputs(". ", fptr);
                 }
             }
             fputc('\n', fptr);
@@ -96,11 +98,14 @@ void printMaze_divide(char maze[255][255], int baris, int kolom, int pathLength,
             {
                 if (maze[i][j] == 'x')
                 {
-                    printf("1");
+                    printf("V ");
                 }
-                else
+                else if(maze[i][j] == '#')
                 {
-                    printf("_");
+                    printf("# ");
+                }
+                else if(maze[i][j] == '.'){
+                    printf(". ");
                 }
             }
             printf("\n");

@@ -25,6 +25,10 @@ int main()
     bacaFile(matriks, &baris, &kolom);
     struct Coords awal = findStart(matriks, baris, kolom);
     struct Coords akhir = findEnd(matriks, baris, kolom);
+    point* start = (point*) malloc(sizeof(point));
+    cariKoordinat(start, 'S', baris, kolom, matriks);
+    point* end = (point*) malloc(sizeof(point));
+    cariKoordinat(end, 'E', baris, kolom, matriks);
     // printf("Baris: %d", baris);
     // printf("Kolom: %d", kolom);
     // tes print isi file txt
@@ -72,11 +76,41 @@ int main()
     }
     else if (pilihanAlgorithm == 6)
     {
-        // main_divide();
+        FILE* fptr;
+        fptr = fopen("output.txt", "w");
+        
+        divideAndConquer(matriks, start, baris, kolom, end, 0, fptr);
+        
+        // // TES OUTPUT
+        // printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
     }
     else if (pilihanAlgorithm == 7)
     {
-        main_bfs();
+        Point_bfs source = {start->y, start->x};
+        Point_bfs dest = {end->y, end->x};
+        int step = BFS(matriks, source, dest, baris, kolom);
+        
+        // // TES OUTPUT
+        // printf("Shortest path : %d steps\n", step);
+        // if (step != 1){
+        //     printf("Shortest path : \n");
+        //     for(int i = 0; i< baris; i++){
+        //         for(int j = 0; j<kolom; j++){
+        //             if(matriks[i][j] == 'V' || matriks[i][j] == 'S' || matriks[i][j] == 'E'){
+        //                 printf("%c ", matriks[i][j]);
+        //             }
+        //             else if(matriks[i][j] == '.'){
+        //                 printf(". ");
+        //             } else{
+        //                 printf("# ");
+        //             }
+        //         }
+        //         printf("\n");
+        //     }
+        // }
+        // else{
+        //     printf("Tidak ada jalur.\n");
+        // }        
     }
 
     return 0;
