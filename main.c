@@ -85,8 +85,7 @@ int main()
     else if (pilihanAlgorithm == 4)
     {
 
-        reduceSize(matriks, baris, kolom, newMatriks);
-        DFS(baris, kolom, akhir.x, akhir.y, awal.y, awal.x, newMatriks);
+        DFS(baris, kolom, akhir.x, akhir.y, awal.y, awal.x, matriks);
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 5)
