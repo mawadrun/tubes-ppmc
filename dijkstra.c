@@ -42,7 +42,7 @@ void markShortestPath(char maze[MAX][MAX], Point_dijkstra path[], int pathLen)
     {
         if (maze[path[i].x][path[i].y] != 'S' && maze[path[i].x][path[i].y] != 'E')
         {
-            maze[path[i].x][path[i].y] = '*';
+            maze[path[i].x][path[i].y] = 'V';
         }
     }
 }
@@ -143,7 +143,7 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point_dijkstra start, Poin
     }
     printf("\n");
 
-    // Mark the shortest path with '*'
+    // Mark the shortest path with 'V'
     markShortestPath(maze, path, pathLen);
 
     // Free dynamically allocated memory
