@@ -86,7 +86,7 @@ int main()
     {
 
         reduceSize(matriks, baris, kolom, newMatriks);
-        DFS(baris, kolom, newMatriks, akhir.x, akhir.y, awal.y, awal.x);
+        DFS(baris, kolom, akhir.x, akhir.y, awal.y, awal.x, newMatriks);
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 5)
@@ -119,14 +119,16 @@ int main()
         stopTime = clock();
 
         // // TES OUTPUT
-        if(step == -1){
+        if (step == -1)
+        {
             printf("No path found");
         }
-        else{
-        printf("Shortest path : %d steps\n", step);
-        printMatrix(matriks, baris, kolom);
+        else
+        {
+            printf("Shortest path : %d steps\n", step);
+            printMatrix(matriks, baris, kolom);
         }
-    }   
+    }
 
     double cpu_time_used;
     cpu_time_used = ((double)(stopTime - startTime)) / CLOCKS_PER_SEC;
