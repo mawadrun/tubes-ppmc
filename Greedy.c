@@ -165,7 +165,7 @@ int findallpaths(int m, int n, char matrix[m][n], int prev[2], int current[2], i
 }
 
 
-int main(void) {
+int main_greedy(void) {
     int i = 0,j = 0, m = 1, n, start[2], end[2], prev[2];
     char filename[255], buff[255];
     
