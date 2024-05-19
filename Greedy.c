@@ -165,7 +165,7 @@ int findallpaths(int m, int n, char matrix[m][n], int prev[2], int current[2], i
 }
 
 
-int main_greedy(void) {
+int main(void) {
     int i = 0,j = 0, m = 1, n, start[2], end[2], prev[2];
     char filename[255], buff[255];
     
@@ -174,8 +174,9 @@ int main_greedy(void) {
     // Inisialisasi file eksternal
     /*printf("Nama file yang akan dibaca: ");
     scanf("%s", filename);*/
-
-    FILE* fp = fopen("Maze.txt", "r");
+    printf("Masukin lagi Nama file yang akan dibaca: ");
+    scanf("%s", filename);
+    FILE* fp = fopen(filename, "r");
     while (fp == NULL){
         printf("File tidak bisa dibuka\n");
         printf("Nama file yang akan dibaca: ");
@@ -235,11 +236,11 @@ int main_greedy(void) {
 
     findallpaths(m, n, matrix, prev, start, end, trace);
 
-    /*for(i = 0;i < m; i++){
+    for(i = 0;i < m; i++){
         for(j = 0; j < n; j++){
             printf("%c",matrix[i][j]);
         }
-    }*/
+    }
 
     return 0;
 }
