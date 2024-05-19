@@ -37,11 +37,14 @@ int main()
     struct Coords awal = findStart(matriks, baris, kolom);
     struct Coords akhir = findEnd(matriks, baris, kolom);
     point *start = (point *)malloc(sizeof(point));
-    cariKoordinat(start, 'S', baris, kolom, matriks);
+
+    // Beberapa algoritma pake format ini
+    start->x = awal.y; // pada Coords, x itu vertikal, sedangkan pada point, x itu horizontal
+    start->y = awal.x;
     point *end = (point *)malloc(sizeof(point));
-    cariKoordinat(end, 'E', baris, kolom, matriks);
-    // printf("Baris: %d", baris);
-    // printf("Kolom: %d", kolom);
+    end->x = akhir.y;
+    end->y = akhir.x;
+
     // tes print isi file txt
     printf("\nBentuk maze-nya:\n");
     printMatrix(matriks, baris, kolom);
