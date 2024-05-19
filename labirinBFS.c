@@ -134,22 +134,7 @@ int BFS(char Map[ROW][COL], Point_bfs source, Point_bfs destination, int row, in
                 stepCount[newRow][newCol] = stepCount[curr.x][curr.y] + 1;
             }
         }
-    }
-    printf("x = %d dan y = %d\n", destination.x, destination.y);
-            for(int i = 0; i< row; i++){
-                for(int j = 0; j<col; j++){
-                    if(Map[i][j] == 'V' || Map[i][j] == 'S' || Map[i][j] == 'E'){
-                        printf("%c", Map[i][j]);
-                    }
-                    else if(Map[i][j] == '.'){
-                        printf(".");
-                    } else{
-                        printf("#");
-                    }
-                }
-                printf("\n");
-            }
-    
+    }    
     free(que);
     return -1;
 }

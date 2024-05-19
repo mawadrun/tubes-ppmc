@@ -109,11 +109,7 @@ int main()
         divideAndConquer(matriks, start, baris, kolom, end, 0, fptr);
         stopTime = clock();
 
-        // // TES OUTPUT
-        printf("\nShortest path: (%d)\n", shortestPath);
-        printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
-        printf("\nLongest path: (%d)\n", longestPath);
-        printMaze_divide(bentukLongestPath, baris, kolom, longestPath, false, fptr);
+        printOutput_divide(baris, kolom, fptr);
     }
     else if (pilihanAlgorithm == 7)
     {
@@ -123,9 +119,14 @@ int main()
         stopTime = clock();
 
         // // TES OUTPUT
+        if(step == -1){
+            printf("No path found");
+        }
+        else{
         printf("Shortest path : %d steps\n", step);
         printMatrix(matriks, baris, kolom);
-    }
+        }
+    }   
 
     double cpu_time_used;
     cpu_time_used = ((double)(stopTime - startTime)) / CLOCKS_PER_SEC;

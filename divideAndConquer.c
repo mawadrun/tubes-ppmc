@@ -170,6 +170,18 @@ void cariKoordinat(point *titik, char huruf, int baris, int kolom, char matriks[
     }
 }
 
+void printOutput_divide(int baris, int kolom, FILE* fptr){
+    if(pathCount == 0){
+        printf("No path found");
+    }
+    else{
+        printf("\nShortest path: (%d)\n", shortestPath);
+        printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
+        printf("\nLongest path: (%d)\n", longestPath);
+        printMaze_divide(bentukLongestPath, baris, kolom, longestPath, false, fptr);
+    }
+}
+
 // int main_divide(void) {
 //     // memanggil fungsi bacaFile() untuk membaca file external
 //     // bacaFile();
