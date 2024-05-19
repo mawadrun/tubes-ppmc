@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "definisiFungsi.h"
+// #include "definisiFungsi.h"
 
 #define MAX_SIZE 2000
 
@@ -244,7 +244,7 @@ void DFS(int totalRows, int totalCols, char maze[totalRows][totalCols], int targ
     findAllPaths(totalRows, totalCols, maze, startY, startX, targetY, targetX, pathStack, visited);
 
     // Menampilkan semua jalur dengan visualisasi
-    displayAllPathsWithVisualization(totalRows, totalCols, maze);
+    //displayAllPathsWithVisualization(totalRows, totalCols, maze);
 
     // Menampilkan jalur terpendek dengan visualisasi
     displayShortestPathWithVisualization(totalRows, totalCols, maze);

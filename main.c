@@ -17,6 +17,14 @@
 // *NOTE : definisiFungsi.h isinya cuman deklarasi fungsi
 //         definisiFungsi.c isinya realisasi dari definisiFungsi.h
 
+void reduceSize(char matriks[MAX_ROW][MAX_COL], int m, int n, char newMatriks[m][n]) {
+    for (int i = 0; i < m; i++) {
+        for (int j = 0; j < n; j++) {
+            newMatriks[i][j] = matriks[i][j];
+        }
+    }
+}
+
 int main()
 {
     char matriks[MAX_ROW][MAX_COL];
@@ -51,9 +59,13 @@ int main()
 
     clock_t startTime, stopTime;
     startTime = clock();
-
+    char newMatriks[baris][kolom];
     if (pilihanAlgorithm == 1)
-    {
+    {   
+        int start[2] = {awal.x, awal.y} ;
+        int end[2]     =  { akhir.x , akhir.y};
+        reduceSize(matriks , baris , kolom , newMatriks);
+        //main_greedy(baris , kolom , start , end , newMatriks);
         main_greedy();
         stopTime = clock();
     }
@@ -68,8 +80,10 @@ int main()
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 4)
-    {
-        DFS(kolom, baris, matriks, akhir.x, akhir.y, awal.y, awal.x);
+    {   
+        
+        reduceSize(matriks , baris , kolom , newMatriks);
+        DFS(kolom, baris, newMatriks, akhir.x, akhir.y, awal.y, awal.x);
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 5)
