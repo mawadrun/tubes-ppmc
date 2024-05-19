@@ -28,31 +28,18 @@ int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, 
     end.col = end_col;
     end.row = end_row;
 
-    //printMatrix(maze, rows, cols);
-
     // Alokasi Memori
     Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     Cell *shortestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     Cell *longestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
 
-    // Mencetak Shortest Path
+    // Mencari Shortest Path
     printf("\nShortest Path:\n");
     findShortestPath(maze, rows, cols, start, end);
-    maze[start.row][start.col] = '1';
-    maze[end.row][end.col] = '1';
-    printMaze_back(maze, rows, cols);
 
-    // Mencetak Longest Path
+    // Mencari Longest Path
     printf("\nLongest Path:\n");
-    int maxLength = 0;
     findLongestPath(maze, rows, cols, start, end);
-    for (int i = 0; i < maxLength; i++)
-    {
-        maze[longestPath[i].row][longestPath[i].col] = '1';
-    }
-    maze[start.row][start.col] = '1';
-    maze[end.row][end.col] = '1';
-    printMaze_back(maze, rows, cols);
 
     // Free Memori
     free(path);
@@ -75,6 +62,7 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     Cell *shortestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     int minLength = rows * cols + 1;
+    bool pathFound = false;
 
     // Menandai Posisi Start sudah dilalui
     maze[start.row][start.col] = '#';
@@ -83,14 +71,25 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     backtrackShortestPath(maze, rows, cols, start, end, 0, &minLength, path, shortestPath);
 
     // Menandai Shortest Path
-    for (int i = 0; i < minLength; i++)
-    {
-        maze[shortestPath[i].row][shortestPath[i].col] = '1';
+    if (minLength != rows * cols + 1) {
+        pathFound = true;
+        for (int i = 0; i < minLength; i++) {
+            maze[shortestPath[i].row][shortestPath[i].col] = '1';
+        }
     }
 
     // Free Memori
     free(path);
     free(shortestPath);
+
+    // Print Shortest Path
+    if (pathFound) {
+        maze[start.row][start.col] = '1'; 
+        maze[end.row][end.col] = '1'; 
+        printMaze(maze, rows, cols);
+    } else { // Tidak Ada Path yang ditemukan
+        printf("No path found\n");
+    }
 }
 
 // Fungsi untuk Backtracking Shortest Path
@@ -152,6 +151,7 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     Cell *path = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     Cell *longestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
     int maxLength = 0;
+    bool pathFound = false;
 
     // Menandai Posisi Start sudah dilalui
     maze[start.row][start.col] = '#';
@@ -160,14 +160,25 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     backtrackLongestPath(maze, rows, cols, start, end, 0, &maxLength, path, longestPath);
 
     // Menandai Longest Path
-    for (int i = 0; i < maxLength; i++)
-    {
-        maze[longestPath[i].row][longestPath[i].col] = '1';
+    if (maxLength != 0) {
+        pathFound = true;
+        for (int i = 0; i < maxLength; i++) {
+            maze[longestPath[i].row][longestPath[i].col] = '1';
+        }
     }
 
     // Free Memori
     free(path);
     free(longestPath);
+
+    // Print Longest Path
+    if (pathFound) {
+        maze[start.row][start.col] = '1'; 
+        maze[end.row][end.col] = '1'; 
+        printMaze(maze, rows, cols);
+    } else { // Tidak Ada Path yang ditemukan
+        printf("No path found\n");
+    }
 }
 
 // Fungsi untuk Backtracking Longest Path
