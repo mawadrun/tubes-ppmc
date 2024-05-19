@@ -86,7 +86,7 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     if (pathFound) {
         maze[start.row][start.col] = '1'; 
         maze[end.row][end.col] = '1'; 
-        printMaze(maze, rows, cols);
+        printMaze_back(maze, rows, cols);
     } else { // Tidak Ada Path yang ditemukan
         printf("No path found\n");
     }
@@ -175,7 +175,7 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     if (pathFound) {
         maze[start.row][start.col] = '1'; 
         maze[end.row][end.col] = '1'; 
-        printMaze(maze, rows, cols);
+        printMaze_back(maze, rows, cols);
     } else { // Tidak Ada Path yang ditemukan
         printf("No path found\n");
     }
