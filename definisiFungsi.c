@@ -37,3 +37,11 @@ void bacaFile(char matrix[MAX_ROW][MAX_COL], int *row, int *col)
     *row = baris;
     *col = kolom;
 }
+
+void ubah255ke236(char maze255[255][255], char maze236[236][236]){
+    for(int i=0; i<236; i++){
+        for(int j=0; j<236; j++){
+            maze236[i][j] = maze255[i][j];
+        }
+    }
+}

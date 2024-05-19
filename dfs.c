@@ -280,7 +280,7 @@ void DFS(int totalRows, int totalCols, char maze[totalRows][totalCols], int targ
     return;
 }
 
-int main()
+int main_dfs()
 {
     // Labirin
      char matriks[11][13] = {
