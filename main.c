@@ -17,11 +17,11 @@
 // *NOTE : definisiFungsi.h isinya cuman deklarasi fungsi
 //         definisiFungsi.c isinya realisasi dari definisiFungsi.h
 
-void reduceSize(char matriks[MAX_ROW][MAX_COL], int m, int n, char newMatriks[m][n])
+void reduceSize(char matriks[MAX_ROW][MAX_COL], int m, int n, char newMatriks[m][n + 1])
 {
     for (int i = 0; i < m; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 0; j <= n; j++)
         {
             newMatriks[i][j] = matriks[i][j];
         }
@@ -65,14 +65,30 @@ int main()
 
     clock_t startTime, stopTime;
     startTime = clock();
-    char newMatriks[baris][kolom];
+    char newMatriks[baris][(kolom + 1)];
     if (pilihanAlgorithm == 1)
     {
-        int start[2] = {awal.x, awal.y};
+        int start[2] = {awal.y, awal.x};
         int end[2] = {akhir.x, akhir.y};
+        int prev[2] = {-1, -1};
         reduceSize(matriks, baris, kolom, newMatriks);
-        // main_greedy(baris , kolom , start , end , newMatriks);
-        main_greedy();
+        int trace[baris][kolom + 1];
+        for (int i = 0; i < baris; i++)
+        {
+            for (int j = 0; j <= kolom; j++)
+            {
+                trace[i][j] = 0;
+            }
+        }
+        findallpaths(baris, kolom + 1, newMatriks, prev, start, end, trace);
+        for (int i = 0; i < baris; i++)
+        {
+            for (int j = 0; j < kolom; j++)
+            {
+                printf("%c ", newMatriks[i][j]);
+            }
+            printf("%c", newMatriks[i][kolom]);
+        }
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 2)
