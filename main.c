@@ -17,9 +17,12 @@
 // *NOTE : definisiFungsi.h isinya cuman deklarasi fungsi
 //         definisiFungsi.c isinya realisasi dari definisiFungsi.h
 
-void reduceSize(char matriks[MAX_ROW][MAX_COL], int m, int n, char newMatriks[m][n]) {
-    for (int i = 0; i < m; i++) {
-        for (int j = 0; j < n; j++) {
+void reduceSize(char matriks[MAX_ROW][MAX_COL], int m, int n, char newMatriks[m][n])
+{
+    for (int i = 0; i < m; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
             newMatriks[i][j] = matriks[i][j];
         }
     }
@@ -33,9 +36,9 @@ int main()
     bacaFile(matriks, &baris, &kolom);
     struct Coords awal = findStart(matriks, baris, kolom);
     struct Coords akhir = findEnd(matriks, baris, kolom);
-    point* start = (point*) malloc(sizeof(point));
+    point *start = (point *)malloc(sizeof(point));
     cariKoordinat(start, 'S', baris, kolom, matriks);
-    point* end = (point*) malloc(sizeof(point));
+    point *end = (point *)malloc(sizeof(point));
     cariKoordinat(end, 'E', baris, kolom, matriks);
     // printf("Baris: %d", baris);
     // printf("Kolom: %d", kolom);
@@ -61,11 +64,11 @@ int main()
     startTime = clock();
     char newMatriks[baris][kolom];
     if (pilihanAlgorithm == 1)
-    {   
-        int start[2] = {awal.x, awal.y} ;
-        int end[2]     =  { akhir.x , akhir.y};
-        reduceSize(matriks , baris , kolom , newMatriks);
-        //main_greedy(baris , kolom , start , end , newMatriks);
+    {
+        int start[2] = {awal.x, awal.y};
+        int end[2] = {akhir.x, akhir.y};
+        reduceSize(matriks, baris, kolom, newMatriks);
+        // main_greedy(baris , kolom , start , end , newMatriks);
         main_greedy();
         stopTime = clock();
     }
@@ -80,9 +83,9 @@ int main()
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 4)
-    {   
-        
-        reduceSize(matriks , baris , kolom , newMatriks);
+    {
+
+        reduceSize(matriks, baris, kolom, newMatriks);
         DFS(baris, kolom, newMatriks, akhir.x, akhir.y, awal.y, awal.x);
         stopTime = clock();
     }
@@ -94,16 +97,18 @@ int main()
         end_point.x = akhir.y;
         end_point.y = akhir.x;
         dijkstra(matriks, baris, kolom, start_point, end_point);
+        printf("Maze with shortest path marked:\n");
+        printMatrix(matriks, baris, kolom);
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 6)
     {
-        FILE* fptr;
+        FILE *fptr;
         fptr = fopen("output.txt", "w");
-        
+
         divideAndConquer(matriks, start, baris, kolom, end, 0, fptr);
         stopTime = clock();
-        
+
         // // TES OUTPUT
         printf("\nShortest path: (%d)\n", shortestPath);
         printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
@@ -116,14 +121,14 @@ int main()
         Point_bfs dest = {end->y, end->x};
         int step = BFS(matriks, source, dest, baris, kolom);
         stopTime = clock();
-        
+
         // // TES OUTPUT
         printf("Shortest path : %d steps\n", step);
         printMatrix(matriks, baris, kolom);
     }
-    
+
     double cpu_time_used;
-    cpu_time_used = ((double) (stopTime - startTime)) / CLOCKS_PER_SEC;
+    cpu_time_used = ((double)(stopTime - startTime)) / CLOCKS_PER_SEC;
     printf("\nWaktu eksekusi: %.4f detik\n", cpu_time_used);
 
     return 0;
