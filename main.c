@@ -83,7 +83,7 @@ int main()
     {   
         
         reduceSize(matriks , baris , kolom , newMatriks);
-        DFS(kolom, baris, newMatriks, akhir.x, akhir.y, awal.y, awal.x);
+        DFS(baris, kolom, newMatriks, akhir.x, akhir.y, awal.y, awal.x);
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 5)

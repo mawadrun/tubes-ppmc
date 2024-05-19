@@ -90,13 +90,28 @@ void findAllPaths(int rows, int cols, char maze[rows][cols], int currentY, int c
     if (currentY == targetY && currentX == targetX)
     {
         // Jika mencapai titik akhir, simpan jalur saat ini
+        // Buat salinan stack untuk disimpan
+        Stack *tempStack = initializeStack();
         for (int i = 0; i <= stack->topIndex; i++)
         {
-            allPaths.paths[allPaths.count][i][0] = stack->coordinates[i][0];
-            allPaths.paths[allPaths.count][i][1] = stack->coordinates[i][1];
+            push(tempStack, stack->coordinates[i][0], stack->coordinates[i][1]);
         }
-        allPaths.lengths[allPaths.count] = stack->topIndex + 1;
-        allPaths.count++;
+
+        // Periksa panjang jalur sebelum menyimpannya
+        int pathLength = tempStack->topIndex + 1;
+        if (pathLength > 0) {
+            // Simpan jalur hanya jika panjangnya lebih dari 0
+            for (int i = 0; i < pathLength; i++)
+            {
+                allPaths.paths[allPaths.count][i][0] = tempStack->coordinates[i][0];
+                allPaths.paths[allPaths.count][i][1] = tempStack->coordinates[i][1];
+            }
+            allPaths.lengths[allPaths.count] = pathLength;
+            allPaths.count++;
+        }
+        
+        // Bebaskan memori yang dialokasikan untuk stack sementara
+        free(tempStack);
         return;
     }
 
@@ -117,6 +132,7 @@ void findAllPaths(int rows, int cols, char maze[rows][cols], int currentY, int c
 
     visited[currentY][currentX] = false; // Tandai koordinat saat ini sebagai belum dikunjungi untuk jalur lainnya
 }
+
 
 // Fungsi untuk menampilkan jalur yang ditemukan dalam bentuk visual di labirin
 void printAllPath(int rows, int cols, char maze[rows][cols], Stack *stack)
@@ -181,6 +197,11 @@ void displayShortestPathWithVisualization(int rows, int cols, char maze[rows][co
             shortestIndex = i;
         }
     }
+    
+    if (shortestIndex ==0) {
+        printf("Shortest gagal ditemukan");
+        return;
+    }
 
     printf("Visualisasi jalur terpendek:\n");
     Stack *tempStack = initializeStack();
@@ -188,6 +209,7 @@ void displayShortestPathWithVisualization(int rows, int cols, char maze[rows][co
     {
         push(tempStack, allPaths.paths[shortestIndex][j][0], allPaths.paths[shortestIndex][j][1]);
     }
+
     printAllPath(rows, cols, maze, tempStack);
     free(tempStack);
 }
@@ -258,28 +280,30 @@ void DFS(int totalRows, int totalCols, char maze[totalRows][totalCols], int targ
     return;
 }
 
-int main_dfs()
+int main()
 {
     // Labirin
-    char labyrinth[10][10] = {
-        {'#', '#', '#', '#', '#', '#', '#', '#', '.', '.'},
-        {'#', '.', 'S', '.', '.', '.', '#', '.', '.', '#'},
-        {'#', '#', '.', '#', '.', '#', '#', '#', '.', '#'},
-        {'#', '.', '.', '.', '.', '.', '.', '#', '.', '#'},
-        {'#', '#', '#', '#', '#', '.', '#', '#', '.', '#'},
-        {'#', '.', '.', '#', '#', '.', '.', '#', '.', '#'},
-        {'#', '#', '#', '#', '#', '#', '.', '#', '.', '#'},
-        {'#', '.', '#', '.', '.', '.', '.', '.', '.', '#'},
-        {'#', '.', '#', '#', '.', '#', '#', '.', '.', '#'},
-        {'#', '#', '#', '#', 'E', '#', '.', '.', '.', '#'}};
+     char matriks[11][13] = {
+        {'S', '.', '.', '.', '.', '#', '.', '.', '#', '.', '.', '.', '.'},
+        {'#', '#', '.', '#', '.', '#', '.', '#', '.', '.', '.', '#', '.'},
+        {'.', '.', '.', '.', '#', '.', '#', '.', '#', '.', '.', '.', '.'},
+        {'.', '#', '.', '.', '.', '.', '.', '#', '.', '#', '.', '#', '.'},
+        {'.', '#', '.', '#', '.', '.', '.', '.', '.', '.', '#', '#', '.'},
+        {'.', '.', '.', '#', '.', '.', '.', '#', '.', '.', '#', '.', '.'},
+        {'.', '#', '.', '.', '.', '#', '.', '#', '.', '.', '.', '#', '.'},
+        {'.', '#', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.'},
+        {'.', '#', '.', '#', '.', '#', '.', '#', '.', '.', '.', '.', '.'},
+        {'.', '.', '.', '.', '#', '.', '#', '.', '.', 'E', '.', '#', '.'},
+        {'.', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#', '#', '.'}
+    };
 
     // Posisi awal dan target
-    int startY = 1, startX = 2;
-    int endY = 9, endX = 4;
+    int startY = 0, startX = 0;
+    int endY = 9, endX = 9;
 
     // Ukuran labirin
-    int totalRows = 10, totalCols = 10;
+    int totalRows = 13, totalCols = 11;
 
-    DFS(totalRows, totalCols, labyrinth, endY, endX, startX, startY);
+    DFS(totalRows, totalCols, matriks, endY, endX, startX, startY);
     return 0;
 }
