@@ -2,8 +2,9 @@
  *   Modul               : 9 - Tugas Besar
  *   Hari dan Tanggal    : Senin, 20 Mei 2024
  *   Nama (NIM)          : Kania Ika Putri (13222041)
- *   Nama File           : 
- *   Deskripsi           :
+ *   Nama File           : labirinBFS.c
+ *   Deskripsi           : Program dibuat untuk menemukan shortest path dari sebuah maze yang outputnya 
+ *                         ditampilkan pada layar
  *
  */
 
