@@ -3,7 +3,7 @@
  *   Hari dan Tanggal    : Senin, 20 Mei 2024
  *   Nama (NIM)          : Nicholas Darren (13222044)
  *   Nama File           : dijkstra.c
- *   Deskripsi           : aaa
+ *   Deskripsi           : Program dibuat menggunakan algoritma dijkstra yang dapat mencari jalur terpendek.
  *
  */
 
