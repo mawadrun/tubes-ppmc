@@ -119,13 +119,16 @@ int main()
     else if (pilihanAlgorithm == 5)
     {
         Point_dijkstra start_point, end_point;
-        start_point.x = awal.y;
-        start_point.y = awal.x;
-        end_point.x = akhir.y;
-        end_point.y = akhir.x;
-        dijkstra(matriks, baris, kolom, start_point, end_point);
-        printf("Maze with shortest path marked:\n");
-        printMatrix(matriks, baris, kolom);
+        start_point.x = awal.x;
+        start_point.y = awal.y;
+        end_point.x = akhir.x;
+        end_point.y = akhir.y;
+        int dijkstra_found = dijkstra(matriks, baris, kolom, start_point, end_point);
+        if (dijkstra_found)
+        {
+            printf("Maze with shortest path marked:\n");
+            printMatrix(matriks, baris, kolom);
+        }
         stopTime = clock();
     }
     else if (pilihanAlgorithm == 6)
