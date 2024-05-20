@@ -1,9 +1,9 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
  *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Hari dan Tanggal    : Senin, 13 Mei 2024
+ *   Nama (NIM)          : Bramantio Ananda (13222042)
+ *   Nama File           : backtracking.c
+ *   Deskripsi           : Implementasi algoritma backtracking untuk mencari shortest path dan longest path dari sebuah labirin
  *
  */
 
