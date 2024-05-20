@@ -130,9 +130,10 @@ int findallpaths(int m, int n, char matrix[m][n], int prev[2], int current[2], i
             nextc[0] = current[0] + 1;
             nextc[1] = current[1];
 
-            next = matrix[nextc[1]][nextc[0]];
+            
             if (!(nextc[0] == prev[0] && nextc[1] == prev[1]))
             {
+                next = matrix[nextc[1]][nextc[0]];
                 if (next == '.' || next == '-')
                 {
                     found[1] = findallpaths(m, n, matrix, prev, nextc, end, trace);
@@ -168,9 +169,10 @@ int findallpaths(int m, int n, char matrix[m][n], int prev[2], int current[2], i
             nextc[0] = current[0] - 1;
             nextc[1] = current[1];
 
-            next = matrix[nextc[1]][nextc[0]];
+            
             if (!(nextc[0] == prev[0] && nextc[1] == prev[1]))
             {
+                next = matrix[nextc[1]][nextc[0]];
                 if (next == '.' || next == '-')
                 {
 
