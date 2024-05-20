@@ -115,7 +115,8 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
     int longestPathLength = -1;
 
     DFSUtil(totalRows, totalCols, startY, startX, endY, endX, visited, path, pathIndex, shortestPath, longestPath, &shortestPathLength, &longestPathLength, matriks);
-
+    
+    if (shortestPathLength != -1){
     char shortestPathMaze[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < totalRows; ++i)
     {
@@ -129,8 +130,11 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
     printf("Shortest Path:\n");
     printMazeDFS(totalRows, totalCols, shortestPathMaze);
     printf("\n");
-
+    } else{
+        printf("no path was found");
+    }
     // Buat salinan matriks untuk menandai jalur terpanjang
+    if (longestPathLength != -1){
     char longestPathMaze[MAX_ROWS][MAX_COLS];
     for (int i = 0; i < totalRows; ++i)
     {
@@ -145,7 +149,9 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
     printf("Longest Path:\n");
     printMazeDFS(totalRows, totalCols, longestPathMaze);
     printf("\n");
-
+    }else{
+        printf(".");
+    }
     // Bebaskan memori
     for (int i = 0; i < totalRows; ++i)
     {
