@@ -51,7 +51,7 @@ void markShortestPath(char maze[MAX][MAX], Point_dijkstra path[], int pathLen)
     {
         if (maze[path[i].x][path[i].y] != 'S' && maze[path[i].x][path[i].y] != 'E')
         {
-            maze[path[i].x][path[i].y] = '*';
+            maze[path[i].x][path[i].y] = 'V';
         }
     }
 }
