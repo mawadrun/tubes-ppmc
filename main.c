@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    :
+ *   Kelompok            : C1
+ *   Nama File           : main.c
+ *   Deskripsi           : Integrasi dari algoritma-algoritma yang telah dibuat beserta adaptasi data yang diperlukan.
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

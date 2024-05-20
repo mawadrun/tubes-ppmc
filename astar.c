@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    : 13 Mei 2024
+ *   Nama (NIM)          : Nur Dawam Abdan Syakuro (13222046)
+ *   Nama File           : astar.c
+ *   Deskripsi           : Implementasi algoritma A* menggunakan priority queue sebagai penentu langkah terbaik untuk diambil, dan manhattan distance untuk menghitung jarak.
+ *
+ */
+
 #include <stdio.h>
 #include <sys/time.h>
 #include <math.h>

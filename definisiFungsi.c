@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    :
+ *   Nama (NIM)          :
+ *   Nama File           :
+ *   Deskripsi           :
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,9 +47,12 @@ void bacaFile(char matrix[MAX_ROW][MAX_COL], int *row, int *col)
     *col = kolom;
 }
 
-void ubah255ke236(char maze255[255][255], char maze236[236][236]){
-    for(int i=0; i<236; i++){
-        for(int j=0; j<236; j++){
+void ubah255ke236(char maze255[255][255], char maze236[236][236])
+{
+    for (int i = 0; i < 236; i++)
+    {
+        for (int j = 0; j < 236; j++)
+        {
             maze236[i][j] = maze255[i][j];
         }
     }

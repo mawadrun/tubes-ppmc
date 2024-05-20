@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    :
+ *   Nama (NIM)          :
+ *   Nama File           :
+ *   Deskripsi           :
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,7 +14,8 @@
 #include <time.h>
 #include "definisiFungsi.h"
 
-typedef struct point{
+typedef struct point
+{
     // baris adalah y, kolom adalah x
     int x;
     int y;
@@ -76,11 +86,12 @@ void printMaze_divide(char maze[255][255], int baris, int kolom, int pathLength,
                 {
                     fputs("V ", fptr);
                 }
-                else if(maze[i][j] == '#')
+                else if (maze[i][j] == '#')
                 {
                     fputs("# ", fptr);
                 }
-                else if(maze[i][j] == '.'){
+                else if (maze[i][j] == '.')
+                {
                     fputs(". ", fptr);
                 }
             }
@@ -100,11 +111,12 @@ void printMaze_divide(char maze[255][255], int baris, int kolom, int pathLength,
                 {
                     printf("V ");
                 }
-                else if(maze[i][j] == '#')
+                else if (maze[i][j] == '#')
                 {
                     printf("# ");
                 }
-                else if(maze[i][j] == '.'){
+                else if (maze[i][j] == '.')
+                {
                     printf(". ");
                 }
             }
@@ -170,11 +182,14 @@ void cariKoordinat(point *titik, char huruf, int baris, int kolom, char matriks[
     }
 }
 
-void printOutput_divide(int baris, int kolom, FILE* fptr){
-    if(pathCount == 0){
+void printOutput_divide(int baris, int kolom, FILE *fptr)
+{
+    if (pathCount == 0)
+    {
         printf("No path found");
     }
-    else{
+    else
+    {
         printf("\nShortest path: (%d)\n", shortestPath);
         printMaze_divide(bentukShortestPath, baris, kolom, shortestPath, false, fptr);
         printf("\nLongest path: (%d)\n", longestPath);

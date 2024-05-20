@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    :
+ *   Nama (NIM)          :
+ *   Nama File           :
+ *   Deskripsi           :
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -71,9 +80,11 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     backtrackShortestPath(maze, rows, cols, start, end, 0, &minLength, path, shortestPath);
 
     // Menandai Shortest Path
-    if (minLength != rows * cols + 1) {
+    if (minLength != rows * cols + 1)
+    {
         pathFound = true;
-        for (int i = 0; i < minLength; i++) {
+        for (int i = 0; i < minLength; i++)
+        {
             maze[shortestPath[i].row][shortestPath[i].col] = '1';
         }
     }
@@ -83,11 +94,14 @@ void findShortestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell st
     free(shortestPath);
 
     // Print Shortest Path
-    if (pathFound) {
-        maze[start.row][start.col] = '1'; 
-        maze[end.row][end.col] = '1'; 
+    if (pathFound)
+    {
+        maze[start.row][start.col] = '1';
+        maze[end.row][end.col] = '1';
         printMaze_back(maze, rows, cols);
-    } else { // Tidak Ada Path yang ditemukan
+    }
+    else
+    { // Tidak Ada Path yang ditemukan
         printf("No path found\n");
     }
 }
@@ -160,9 +174,11 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     backtrackLongestPath(maze, rows, cols, start, end, 0, &maxLength, path, longestPath);
 
     // Menandai Longest Path
-    if (maxLength != 0) {
+    if (maxLength != 0)
+    {
         pathFound = true;
-        for (int i = 0; i < maxLength; i++) {
+        for (int i = 0; i < maxLength; i++)
+        {
             maze[longestPath[i].row][longestPath[i].col] = '1';
         }
     }
@@ -172,11 +188,14 @@ void findLongestPath(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, Cell sta
     free(longestPath);
 
     // Print Longest Path
-    if (pathFound) {
-        maze[start.row][start.col] = '1'; 
-        maze[end.row][end.col] = '1'; 
+    if (pathFound)
+    {
+        maze[start.row][start.col] = '1';
+        maze[end.row][end.col] = '1';
         printMaze_back(maze, rows, cols);
-    } else { // Tidak Ada Path yang ditemukan
+    }
+    else
+    { // Tidak Ada Path yang ditemukan
         printf("No path found\n");
     }
 }
@@ -240,10 +259,12 @@ void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols)
     {
         for (int j = 0; j < cols; j++)
         {
-            if(maze[i][j] == '#' || maze[i][j] == '.'){
+            if (maze[i][j] == '#' || maze[i][j] == '.')
+            {
                 printf("%c ", maze[i][j]);
             }
-            else{
+            else
+            {
                 printf("V ");
             }
         }

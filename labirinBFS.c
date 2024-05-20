@@ -1,3 +1,12 @@
+/** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
+ *   Modul               : Tubes
+ *   Hari dan Tanggal    :
+ *   Nama (NIM)          :
+ *   Nama File           :
+ *   Deskripsi           :
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -9,35 +18,41 @@
 #define COL 255
 
 // Struct untuk menyimpan koordinat
-typedef struct {
-    int x;  
+typedef struct
+{
+    int x;
     int y;
 } Point_bfs;
 
 // Struct untuk node antrian
-typedef struct Qnode {
+typedef struct Qnode
+{
     Point_bfs node;
-    struct Qnode* next;
+    struct Qnode *next;
 } Qnode;
 
 // Queue untuk BFS
-typedef struct {
+typedef struct
+{
     Qnode *front, *rear;
 } Queue;
 
 // Create Queue
-Queue* createQueue(){
-    Queue* que = (Queue*)malloc(sizeof(Queue));
+Queue *createQueue()
+{
+    Queue *que = (Queue *)malloc(sizeof(Queue));
     que->front = que->rear = NULL;
     return que;
 }
 
 // Enqueue
-void enQueue(Queue* que, Point_bfs point){
-    Qnode *temp = (Qnode*)malloc(sizeof(Qnode));
+void enQueue(Queue *que, Point_bfs point)
+{
+    Qnode *temp = (Qnode *)malloc(sizeof(Qnode));
     temp->node = point;
     temp->next = NULL;
-    if (que->rear == NULL) {
+    if (que->rear == NULL)
+    {
         que->front = que->rear = temp;
         return;
     }
@@ -46,34 +61,42 @@ void enQueue(Queue* que, Point_bfs point){
 }
 
 // Dequeue
-Point_bfs deQueue(Queue* que){
-    if (que->front == NULL) {
+Point_bfs deQueue(Queue *que)
+{
+    if (que->front == NULL)
+    {
         return (Point_bfs){-1, -1};
     }
-    Qnode* temp = que->front;
+    Qnode *temp = que->front;
     Point_bfs point = temp->node;
     que->front = que->front->next;
-    if (que->front == NULL) {
+    if (que->front == NULL)
+    {
         que->rear = NULL;
     }
     free(temp);
     return point;
 }
 
-
-bool isEmpty(Queue* que) {
+bool isEmpty(Queue *que)
+{
     return (que->front == NULL);
 }
 
 // Menemukan source dan destination
-void findStartStop(char Map[ROW][COL], int rows, int columns, int* startRow, int* startCol, int* stopRow, int* stopCol) { 
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            if (Map[i][j] == 'S') {
+void findStartStop(char Map[ROW][COL], int rows, int columns, int *startRow, int *startCol, int *stopRow, int *stopCol)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < columns; j++)
+        {
+            if (Map[i][j] == 'S')
+            {
                 *startRow = i;
                 *startCol = j;
             }
-            if (Map[i][j] == 'E') {
+            if (Map[i][j] == 'E')
+            {
                 *stopRow = i;
                 *stopCol = j;
             }
@@ -82,36 +105,43 @@ void findStartStop(char Map[ROW][COL], int rows, int columns, int* startRow, int
 }
 
 // Mengecek vertex valid atau tidak
-bool isValid(int row, int col, int rows, int columns) {
+bool isValid(int row, int col, int rows, int columns)
+{
     return (row >= 0) && (row < rows) && (col >= 0) && (col < columns);
 }
 
 // BFS untuk menemukan jalur terpendek
-int BFS(char Map[ROW][COL], Point_bfs source, Point_bfs destination, int row, int col)  {
+int BFS(char Map[ROW][COL], Point_bfs source, Point_bfs destination, int row, int col)
+{
     bool visited[row][col];
     Point_bfs parent[row][col];
     int stepCount[row][col];
-    for(int i = 0; i < row; i++){
-        for(int j =  0; j < col; j++){
-            visited[i][j] = false; 
+    for (int i = 0; i < row; i++)
+    {
+        for (int j = 0; j < col; j++)
+        {
+            visited[i][j] = false;
             parent[i][j] = (Point_bfs){-1, -1};
-            stepCount[i][j] = 0; 
+            stepCount[i][j] = 0;
         }
     }
 
-    Queue* que = createQueue(); 
+    Queue *que = createQueue();
     enQueue(que, source);
     visited[source.x][source.y] = true;
 
     int rowNum[] = {-1, 0, 0, 1};
     int colNum[] = {0, -1, 1, 0};
 
-    while(!isEmpty(que)){
-        Point_bfs curr = deQueue(que); 
-        if((curr.x == destination.x) && (curr.y == destination.y)) {
+    while (!isEmpty(que))
+    {
+        Point_bfs curr = deQueue(que);
+        if ((curr.x == destination.x) && (curr.y == destination.y))
+        {
             // Menandai jalur dari tujuan ke sumber
             Point_bfs trace = curr;
-            while(parent[trace.x][trace.y].x != -1 && parent[trace.x][trace.y].y != -1){
+            while (parent[trace.x][trace.y].x != -1 && parent[trace.x][trace.y].y != -1)
+            {
 
                 Map[trace.x][trace.y] = 'V';
 
@@ -124,22 +154,25 @@ int BFS(char Map[ROW][COL], Point_bfs source, Point_bfs destination, int row, in
             return stepCount[curr.x][curr.y];
         }
 
-        for (int i = 0; i < 4; i++){
+        for (int i = 0; i < 4; i++)
+        {
             int newRow = curr.x + rowNum[i];
             int newCol = curr.y + colNum[i];
-            if(isValid(newRow, newCol, row, col) && Map[newRow][newCol] != '#' && !visited[newRow][newCol]){
-                visited[newRow][newCol] = true; 
-                parent[newRow][newCol] = curr; 
+            if (isValid(newRow, newCol, row, col) && Map[newRow][newCol] != '#' && !visited[newRow][newCol])
+            {
+                visited[newRow][newCol] = true;
+                parent[newRow][newCol] = curr;
                 enQueue(que, (Point_bfs){newRow, newCol});
                 stepCount[newRow][newCol] = stepCount[curr.x][curr.y] + 1;
             }
         }
-    }    
+    }
     free(que);
     return -1;
 }
 
-int main_bfs() {
+int main_bfs()
+{
     // // Input nama file
     // char fileName[50];
     // printf("Masukkan File TXT Struktur Maze: ");
@@ -162,7 +195,7 @@ int main_bfs() {
     // }
 
     // // Menhitung Kolom
-    // int col = 0; 
+    // int col = 0;
     // while(Map[0][col] != '\0'){
     //     col++;
     // }
@@ -184,7 +217,7 @@ int main_bfs() {
     // Point_bfs source = {startRow, startCol};
     // Point_bfs dest = {stopRow, stopCol};
 
-    clock_t startTime, stopTime; 
+    clock_t startTime, stopTime;
     double cpu_time_used;
     // startTime = clock();
     // int step = BFS(Map, source, dest, row, col);
@@ -210,7 +243,7 @@ int main_bfs() {
     //     printf("Tidak ada jalur.\n");
     // }
 
-    cpu_time_used = ((double)stopTime-startTime)/CLOCKS_PER_SEC;
+    cpu_time_used = ((double)stopTime - startTime) / CLOCKS_PER_SEC;
     printf("Waktu yang diperlukan untuk mencari rute : %f detik", cpu_time_used);
-    return 0; 
+    return 0;
 }
