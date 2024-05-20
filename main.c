@@ -1,6 +1,6 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
- *   Modul               : Tubes
- *   Hari dan Tanggal    :
+ *   Modul               : 9 - Tubes
+ *   Hari dan Tanggal    : Selasa, 21 Mei 2024
  *   Kelompok            : C1
  *   Nama File           : main.c
  *   Deskripsi           : Integrasi dari algoritma-algoritma yang telah dibuat beserta adaptasi data yang diperlukan.
@@ -57,8 +57,8 @@ int main()
     // tes print isi file txt
     printf("\nBentuk maze-nya:\n");
     printMatrix(matriks, baris, kolom);
-    printf("\nJumlah baris = %d\nJumlah kolom = %d", baris, kolom);
-    printf("\nTitik awal: %d, %d\n Titik akhir: %d, %d\n", awal.x, awal.y, akhir.x, akhir.y);
+    // printf("\nJumlah baris = %d\nJumlah kolom = %d", baris, kolom);
+    // printf("\nTitik awal: %d, %d\n Titik akhir: %d, %d\n", awal.x, awal.y, akhir.x, akhir.y);
 
     int pilihanAlgorithm;
     printf("\nMau pake algoritma apaan??\n");
