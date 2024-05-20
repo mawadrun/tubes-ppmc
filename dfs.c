@@ -1,9 +1,9 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
  *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Hari dan Tanggal    : Senin , 20 Mei 2024
+ *   Nama (NIM)          : Joanna Alicia T (13222043)
+ *   Nama File           : dfs.c
+ *   Deskripsi           : Program c dengan menggunakan algoritma Depth First Search untuk mencari longest path dan shortest path
  *
  */
 
@@ -115,41 +115,47 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
     int longestPathLength = -1;
 
     DFSUtil(totalRows, totalCols, startY, startX, endY, endX, visited, path, pathIndex, shortestPath, longestPath, &shortestPathLength, &longestPathLength, matriks);
-    
-    if (shortestPathLength != -1){
-    char shortestPathMaze[MAX_ROWS][MAX_COLS];
-    for (int i = 0; i < totalRows; ++i)
-    {
-        for (int j = 0; j < totalCols; ++j)
-        {
-            shortestPathMaze[i][j] = matriks[i][j];
-        }
-    }
-    markPath(totalRows, totalCols, shortestPath, shortestPathMaze, shortestPathLength);
 
-    printf("Shortest Path:\n");
-    printMazeDFS(totalRows, totalCols, shortestPathMaze);
-    printf("\n");
-    } else{
+    if (shortestPathLength != -1)
+    {
+        char shortestPathMaze[MAX_ROWS][MAX_COLS];
+        for (int i = 0; i < totalRows; ++i)
+        {
+            for (int j = 0; j < totalCols; ++j)
+            {
+                shortestPathMaze[i][j] = matriks[i][j];
+            }
+        }
+        markPath(totalRows, totalCols, shortestPath, shortestPathMaze, shortestPathLength);
+
+        printf("Shortest Path:\n");
+        printMazeDFS(totalRows, totalCols, shortestPathMaze);
+        printf("\n");
+    }
+    else
+    {
         printf("no path was found");
     }
     // Buat salinan matriks untuk menandai jalur terpanjang
-    if (longestPathLength != -1){
-    char longestPathMaze[MAX_ROWS][MAX_COLS];
-    for (int i = 0; i < totalRows; ++i)
+    if (longestPathLength != -1)
     {
-        for (int j = 0; j < totalCols; ++j)
+        char longestPathMaze[MAX_ROWS][MAX_COLS];
+        for (int i = 0; i < totalRows; ++i)
         {
-            longestPathMaze[i][j] = matriks[i][j];
+            for (int j = 0; j < totalCols; ++j)
+            {
+                longestPathMaze[i][j] = matriks[i][j];
+            }
         }
-    }
-    markPath(totalRows, totalCols, longestPath, longestPathMaze, longestPathLength);
+        markPath(totalRows, totalCols, longestPath, longestPathMaze, longestPathLength);
 
-    // Cetak matriks dengan jalur terpanjang
-    printf("Longest Path:\n");
-    printMazeDFS(totalRows, totalCols, longestPathMaze);
-    printf("\n");
-    }else{
+        // Cetak matriks dengan jalur terpanjang
+        printf("Longest Path:\n");
+        printMazeDFS(totalRows, totalCols, longestPathMaze);
+        printf("\n");
+    }
+    else
+    {
         printf(".");
     }
     // Bebaskan memori

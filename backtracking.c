@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 #include "definisiFungsi.h"
 
 #define MAX_ROWS 255
@@ -42,12 +43,22 @@ int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, 
     Cell *longestPath = malloc(MAX_ROWS * MAX_COLS * sizeof(Cell));
 
     // Mencari Shortest Path
+    clock_t startTime, stopTime;
+    startTime = clock();
     printf("\nShortest Path:\n");
     findShortestPath(maze, rows, cols, start, end);
+    stopTime = clock();
+    double cpu_time_used;
+    cpu_time_used = ((double)(stopTime - startTime)) / CLOCKS_PER_SEC;
+    printf("\nWaktu eksekusi (shortest path): %.4f detik\n", cpu_time_used);
 
     // Mencari Longest Path
+    startTime = clock();
     printf("\nLongest Path:\n");
     findLongestPath(maze, rows, cols, start, end);
+    stopTime = clock();
+    cpu_time_used = ((double)(stopTime - startTime)) / CLOCKS_PER_SEC;
+    printf("\nWaktu eksekusi (longest path): %.4f detik\n", cpu_time_used);
 
     // Free Memori
     free(path);
