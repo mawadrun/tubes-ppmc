@@ -1,9 +1,9 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
  *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Hari dan Tanggal    : 13 Mei 2024
+ *   Kelompok            : C1
+ *   Nama File           : definisiFungsi.c
+ *   Deskripsi           : Definisi fungsi-fungsi yang akan digunakan di banyak file .c
  *
  */
 
