@@ -51,54 +51,8 @@ void markShortestPath(char maze[MAX][MAX], Point_dijkstra path[], int pathLen)
     {
         if (maze[path[i].x][path[i].y] != 'S' && maze[path[i].x][path[i].y] != 'E')
         {
-            maze[path[i].x][path[i].y] = 'V';
+            maze[path[i].x][path[i].y] = '*';
         }
-    }
-}
-
-void swap(Node *a, Node *b)
-{
-    Node temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void heapify(Node *minHeap, int heapSize, int i)
-{
-    int smallest = i;
-    int left = 2 * i + 1;
-    int right = 2 * i + 2;
-    if (left < heapSize && minHeap[left].dist < minHeap[smallest].dist)
-    {
-        smallest = left;
-    }
-    if (right < heapSize && minHeap[right].dist < minHeap[smallest].dist)
-    {
-        smallest = right;
-    }
-    if (smallest != i)
-    {
-        swap(&minHeap[i], &minHeap[smallest]);
-        heapify(minHeap, heapSize, smallest);
-    }
-}
-
-Node extractMin(Node *minHeap, int *heapSize)
-{
-    Node minNode = minHeap[0];
-    minHeap[0] = minHeap[--(*heapSize)];
-    heapify(minHeap, *heapSize, 0);
-    return minNode;
-}
-
-void insertNode(Node *minHeap, int *heapSize, Node node)
-{
-    int i = (*heapSize)++;
-    minHeap[i] = node;
-    while (i != 0 && minHeap[(i - 1) / 2].dist > minHeap[i].dist)
-    {
-        swap(&minHeap[i], &minHeap[(i - 1) / 2]);
-        i = (i - 1) / 2;
     }
 }
 
@@ -123,11 +77,30 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point_dijkstra start, Poin
     dist[start.x][start.y] = 0;                                 // start point distance is 0
     Node *minHeap = (Node *)malloc(rows * cols * sizeof(Node)); // min heap for nodes
     int heapSize = 0;
-    insertNode(minHeap, &heapSize, (Node){start, 0});
+    minHeap[heapSize++] = (Node){start, 0};
 
     while (heapSize > 0)
     { // extract node with minimum distance
-        Node minNode = extractMin(minHeap, &heapSize);
+        Node minNode = minHeap[0];
+        minHeap[0] = minHeap[--heapSize];
+        int i = 0;
+        while (i * 2 + 1 < heapSize)
+        {
+            int j = i * 2 + 1;
+            if (j + 1 < heapSize && minHeap[j + 1].dist < minHeap[j].dist)
+            {
+                j++;
+            }
+            if (minHeap[i].dist <= minHeap[j].dist)
+            {
+                break;
+            }
+            Node temp = minHeap[i];
+            minHeap[i] = minHeap[j];
+            minHeap[j] = temp;
+            i = j;
+        }
+
         Point_dijkstra u = minNode.pt;
         if (visited[u.x][u.y])
             continue;
@@ -144,7 +117,15 @@ int dijkstra(char maze[MAX][MAX], int rows, int cols, Point_dijkstra start, Poin
                 {
                     dist[newX][newY] = alt;
                     prev[newX][newY] = u;
-                    insertNode(minHeap, &heapSize, (Node){(Point_dijkstra){newX, newY}, alt});
+                    minHeap[heapSize++] = (Node){(Point_dijkstra){newX, newY}, alt};
+                    i = heapSize - 1;
+                    while (i > 0 && minHeap[(i - 1) / 2].dist > minHeap[i].dist)
+                    {
+                        Node temp = minHeap[i];
+                        minHeap[i] = minHeap[(i - 1) / 2];
+                        minHeap[(i - 1) / 2] = temp;
+                        i = (i - 1) / 2;
+                    }
                 }
             }
         }
