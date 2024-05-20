@@ -1,9 +1,9 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
  *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Hari dan Tanggal    : Minggu, 19 Mei 2024
+ *   Nama (NIM)          : 13222047
+ *   Nama File           : Greedy.c
+ *   Deskripsi           : Fungsi program maze solving yang menggunakan greedy algorithm sebagai basis.
  *
  */
 
