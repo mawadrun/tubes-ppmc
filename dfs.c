@@ -14,62 +14,81 @@
 #define MAX_ROWS 255
 #define MAX_COLS 255
 
+//fungsi untuk mencatat koordinat kolom dan baris
 struct Coords_DFS
 {
     int row, col;
 };
 
+//Fungs untuk mengecek apakah row dan col input berada dalam batras baris dan kolom maksimal
 bool isSafe(int totalRows, int totalCols, int row, int col)
 {
     return (row >= 0) && (row < totalRows) &&
            (col >= 0) && (col < totalCols);
 }
 
+//Fungsi untuk melakukan algoritma DFS
 void DFSUtil(int totalRows, int totalCols, int row, int col, int endY, int endX, bool **visited, struct Coords_DFS path[], int pathIndex, struct Coords_DFS *shortestPath, struct Coords_DFS *longestPath, int *shortestPathLength, int *longestPathLength, char matriks[MAX_ROWS][MAX_COLS])
-{
+{    
+    //Menandai suatu titik kolom dan baris sebagai tempat yag sudah ditandai
     visited[row][col] = true;
+    //Menambahkan jalur pada variable path
     path[pathIndex].row = row;
     path[pathIndex].col = col;
     pathIndex++;
 
+    //Bila pencarian jalur sudah mencapai tahap akhir
     if (row == endY && col == endX)
     {
+        //Bila didapat jalur yang terbaru lebih pendek dari yang tercatat , atau sebelumnya belum pernah mencatat sama sekali (-1)
         if (*shortestPathLength == -1 || pathIndex < *shortestPathLength)
         {
+            //Mengcopy path yang didapat ke variable bernama shortestPath
             for (int i = 0; i < pathIndex; i++)
             {
                 shortestPath[i] = path[i];
             }
+            //Mengupdate jumlah langkah terpende
             *shortestPathLength = pathIndex;
         }
 
+        //Bila didapat jalur terbaru lebih panjang , atau sebelumnya belum pernah dicatat sama sekali(-1)
         if (*longestPathLength == -1 || pathIndex > *longestPathLength)
-        {
+        {    
+            //Mengcopy jalur terpanjang ke longestPath
             for (int i = 0; i < pathIndex; i++)
             {
                 longestPath[i] = path[i];
             }
+            //Mengupdate nilai langkah terpanjang
             *longestPathLength = pathIndex;
         }
     }
-    else
-    {
+    //Bila belum mencapai akhir
+    else    
+    {    
+        //Deklarasi matriks perpindahan yaitu atas , kiri , kanan, bawah
         int rowMove[] = {-1, 0, 0, 1};
         int colMove[] = {0, -1, 1, 0};
+        //Mengiterasi sepanjang 4 kali yaitu atas kiri kanan bawah
         for (int k = 0; k < 4; ++k)
         {
             int nextRow = row + rowMove[k];
             int nextCol = col + colMove[k];
+            //Bila langkah selanjutnya valid maka lakukan iterasi rekurisf
             if (isSafe(totalRows, totalCols, nextRow, nextCol) && !visited[nextRow][nextCol] && matriks[nextRow][nextCol] != '#')
-            {
+            {    
+                //rekursif untuk mengupdate path
                 DFSUtil(totalRows, totalCols, nextRow, nextCol, endY, endX, visited, path, pathIndex, shortestPath, longestPath, shortestPathLength, longestPathLength, matriks);
             }
         }
     }
+    //Bila gagal menemukan jalur maka jalur yang tercatat pada paling atas dihapus , dan visitedi false
     pathIndex--;
     visited[row][col] = false;
 }
 
+//Fungsi untuk meng mark jalur yang sudah diambil dengan V
 void markPath(int totalRows, int totalCols, struct Coords_DFS *path, char matriks[MAX_ROWS][MAX_COLS], int length)
 {
     for (int i = 0; i < length; i++)
@@ -80,7 +99,7 @@ void markPath(int totalRows, int totalCols, struct Coords_DFS *path, char matrik
         }
     }
 }
-
+//Mengprint maze 
 void printMazeDFS(int totalRows, int totalCols, char matriks[MAX_ROWS][MAX_COLS])
 {
     for (int i = 0; i < totalRows; ++i)
@@ -93,8 +112,10 @@ void printMazeDFS(int totalRows, int totalCols, char matriks[MAX_ROWS][MAX_COLS]
     }
 }
 
+//Fungsi untuk eksekusi DFS
 void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int startY, char matriks[MAX_ROWS][MAX_COLS])
-{
+{    
+    //Deklarasi array visited
     bool **visited = (bool **)malloc(totalRows * sizeof(bool *));
     for (int i = 0; i < totalRows; ++i)
     {
@@ -105,17 +126,19 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
         }
     }
 
+    //deklarasi path
     struct Coords_DFS path[MAX_ROWS * MAX_COLS];
     int pathIndex = 0;
-
+    //Deklarasi shorets dan longest
     struct Coords_DFS shortestPath[MAX_ROWS * MAX_COLS];
     int shortestPathLength = -1;
 
     struct Coords_DFS longestPath[MAX_ROWS * MAX_COLS];
     int longestPathLength = -1;
-
+    //memanggil fungsi DFS
     DFSUtil(totalRows, totalCols, startY, startX, endY, endX, visited, path, pathIndex, shortestPath, longestPath, &shortestPathLength, &longestPathLength, matriks);
 
+    //mengrptin shortespath bila ada 
     if (shortestPathLength != -1)
     {
         char shortestPathMaze[MAX_ROWS][MAX_COLS];
@@ -126,8 +149,9 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
                 shortestPathMaze[i][j] = matriks[i][j];
             }
         }
+        //menandai matriks dengan V
         markPath(totalRows, totalCols, shortestPath, shortestPathMaze, shortestPathLength);
-
+        // Cetak matriks dengan jalur terpendek
         printf("Shortest Path:\n");
         printMazeDFS(totalRows, totalCols, shortestPathMaze);
         printf("\n");
@@ -136,7 +160,7 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
     {
         printf("no path was found");
     }
-    // Buat salinan matriks untuk menandai jalur terpanjang
+    // mengprint longestpath bila ada
     if (longestPathLength != -1)
     {
         char longestPathMaze[MAX_ROWS][MAX_COLS];
@@ -147,6 +171,7 @@ void DFS(int totalRows, int totalCols, int endY, int endX, int startX, int start
                 longestPathMaze[i][j] = matriks[i][j];
             }
         }
+         //menandai matriks dengan V
         markPath(totalRows, totalCols, longestPath, longestPathMaze, longestPathLength);
 
         // Cetak matriks dengan jalur terpanjang
