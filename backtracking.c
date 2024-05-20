@@ -1,9 +1,9 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
- *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Modul               : 9 - Tugas Besar
+ *   Hari dan Tanggal    : Selasa, 21 Mei 2024
+ *   Nama (NIM)          : Bramantio Ananda (13222042)
+ *   Nama File           : backtracking.c
+ *   Deskripsi           : Implementasi algoritma backtracking untuk mencari shortest path dan longest path dari sebuah labirin
  *
  */
 
@@ -30,7 +30,6 @@ void printMaze_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols);
 
 int main_back(char maze[MAX_ROWS][MAX_COLS], int rows, int cols, int start_row, int start_col, int end_row, int end_col)
 {
-    // char maze[MAX_ROWS][MAX_COLS];
     Cell start, end;
     start.col = start_col;
     start.row = start_row;

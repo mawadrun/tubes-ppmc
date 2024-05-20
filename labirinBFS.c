@@ -1,9 +1,10 @@
 /** EL2208 Praktikum Pemecahan Masalah dengan C 2023/2024
- *   Modul               : Tubes
- *   Hari dan Tanggal    :
- *   Nama (NIM)          :
- *   Nama File           :
- *   Deskripsi           :
+ *   Modul               : 9 - Tugas Besar
+ *   Hari dan Tanggal    : Senin, 20 Mei 2024
+ *   Nama (NIM)          : Kania Ika Putri (13222041)
+ *   Nama File           : labirinBFS.c
+ *   Deskripsi           : Program dibuat untuk menemukan shortest path dari sebuah maze yang outputnya 
+ *                         ditampilkan pada layar
  *
  */
 
